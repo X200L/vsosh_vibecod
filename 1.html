@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minecraft One Hour</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="gameRoot">
+    <canvas id="game"></canvas>
+
+    <div id="ui">
+      <div id="title">Minecraft One Hour</div>
+      <div id="crosshair">+</div>
+      <div id="info">
+        <div id="coords"></div>
+        <div id="selectedBlock"></div>
+      </div>
+      <div id="chaosPanel">
+        <div class="panel-label">World Anger <span id="chaosValue">0%</span></div>
+        <div id="chaosBar" aria-hidden="true">
+          <div id="chaosFill"></div>
+        </div>
+        <div class="panel-label collapse-label">World Collapse <span id="collapseValue">0%</span></div>
+        <div id="collapseBar" aria-hidden="true">
+          <div id="collapseFill"></div>
+        </div>
+        <div id="parasitePressure">Parasite pressure: 0/45</div>
+      </div>
+      <div id="objectivePanel" aria-live="polite">Find anomaly cores: 0/3</div>
+      <div id="hotbar">
+        <div class="hotbar-slot active">1</div>
+        <div class="hotbar-slot">2</div>
+        <div class="hotbar-slot">3</div>
+        <div class="hotbar-slot">4</div>
+        <div class="hotbar-slot">5</div>
+        <div class="hotbar-slot">6</div>
+      </div>
+      <div id="help">WASD / Arrows &mdash; move<br>Q/E &mdash; up/down<br>LMB &mdash; break<br>RMB &mdash; place<br>1-6 &mdash; select block<br>B &mdash; atomic bomb<br>F &mdash; world phrase<br>` &mdash; fake debug<br>R &mdash; reset world</div>
+      <div id="worldMessage" aria-live="assertive"></div>
+      <div id="memeMessage" aria-live="polite"></div>
+      <div id="debugOverlay"></div>
+    </div>
+
+    <div id="introOverlay" aria-live="polite">
+      <div class="intro-title">Minecraft One Hour</div>
+      <div class="intro-controls">
+        MOVE: WASD / Arrow Keys<br>
+        UP / DOWN: Q / E<br>
+        BREAK: Left Mouse<br>
+        PLACE: Right Mouse<br>
+        SELECT BLOCK: 1-6<br>
+        WORLD PHRASE: F<br>
+        DEBUG: `<br>
+        RESET RUN: R<br>
+        ATOMIC BOMB: B
+      </div>
+      <div class="intro-goal">GOAL: Collect anomaly cores before the world fully breaks.</div>
+    </div>
+
+    <div id="tutorialOverlay" aria-live="polite" aria-hidden="true">
+      <div id="tutorialCard">
+        <div id="tutorialTitle">SURVIVE THE ANOMALY</div>
+        <div class="tutorialLine">MOVE — WASD / ARROWS</div>
+        <div class="tutorialLine">UP / DOWN — Q / E</div>
+        <div class="tutorialLine">BREAK — LEFT MOUSE</div>
+        <div class="tutorialLine">PLACE — RIGHT MOUSE</div>
+        <div class="tutorialLine">SELECT BLOCK — 1-6</div>
+        <div id="tutorialObjective">FIND AND DESTROY 3 ANOMALY CORES</div>
+        <div id="tutorialWarning">IF WORLD ANGER + COLLAPSE HIT THE LIMIT, REALITY WINS</div>
+        <div id="tutorialHint">PRESS R TO RESTART • DISAPPEARS IN 5 SECONDS</div>
+      </div>
+    </div>
+
+    <div id="endScreen" aria-live="assertive" aria-hidden="true">
+      <div id="endTitle"></div>
+      <div id="endSubtitle"></div>
+      <div id="endHint">Press R for a new run</div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

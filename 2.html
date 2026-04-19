@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minecraft-Like 3D Game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+            background: #000;
+            width: 100%;
+            height: 100vh;
+        }
+
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        #ui {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: #fff;
+            font-size: 16px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            z-index: 10;
+            line-height: 1.8;
+        }
+
+        #crosshair {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        #help {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            color: #aaa;
+            font-size: 13px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 12px;
+            border-radius: 8px;
+            line-height: 1.6;
+            z-index: 10;
+        }
+
+        #loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #fff;
+            font-size: 24px;
+            z-index: 20;
+        }
+    </style>
+</head>
+<body>
+    <div id="loading">Loading game...</div>
+    <div id="ui">
+        <div>Position: <span id="pos">0, 0, 0</span></div>
+        <div>Blocks: <span id="blocks">0</span></div>
+        <div>FPS: <span id="fps">0</span></div>
+        <div>Block Type: <span id="blocktype">Red</span></div>
+    </div>
+    <div id="crosshair"></div>
+    <div id="help">
+        <strong>Controls:</strong><br>
+        WASD - Move | SPACE - Jump<br>
+        LEFT CLICK - Break | RIGHT CLICK - Place<br>
+        SCROLL - Change Block
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        console.log("Game starting...");
+
+        // Scene setup
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x87ceeb);
+        scene.fog = new THREE.Fog(0x87ceeb, 300, 500);
+
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFShadowShadowMap;
+        document.body.appendChild(renderer.domElement);
+
+        console.log("Renderer created");
+
+        // Lighting
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+        scene.add(ambientLight);
+
+        const sunLight = new THREE.DirectionalLight(0xffffff, 0.9);
+        sunLight.position.set(50, 80, 50);
+        sunLight.castShadow = true;
+        sunLight.shadow.camera.left = -100;
+        sunLight.shadow.camera.right = 100;
+        sunLight.shadow.camera.top = 100;
+        sunLight.shadow.camera.bottom = -100;
+        sunLight.shadow.camera.far = 300;
+        sunLight.shadow.mapSize.width = 1024;
+        sunLight.shadow.mapSize.height = 1024;
+        scene.add(sunLight);
+
+        // Player
+        const player = {
+            position: new THREE.Vector3(0, 30, 0),
+            velocity: new THREE.Vector3(0, 0, 0),
+            speed: 0.25,
+            jumpForce: 0.8,
+            isOnGround: false,
+            blockType: 0
+        };
+
+        camera.position.copy(player.position);
+        camera.position.y += 1.6;
+
+        // Block types
+        const blockTypeNames = ["Red", "Teal", "Yellow", "Green", "Orange", "Purple"];
+        const blockTypes = [
+            0xff6b6b,
+            0x4ecdc4,
+            0xffe66d,
+            0x95e1d3,
+            0xffa07a,
+            0xb19cd9
+        ];
+
+        // Voxel world
+        const voxels = new Map();
+        const meshes = [];
+        const BLOCK_SIZE = 1;
+
+        function getKey(x, y, z) {
+            return `${Math.round(x)},${Math.round(y)},${Math.round(z)}`;
+        }
+
+        function addBlock(x, y, z, type = 0) {
+            x = Math.round(x);
+            y = Math.round(y);
+            z = Math.round(z);
+            const key = getKey(x, y, z);
+
+            if (voxels.has(key)) return;
+
+            const geometry = new THREE.BoxGeometry(1, 1, 1);
+            const material = new THREE.MeshStandardMaterial({
+                color: blockTypes[type % blockTypes.length],
+                roughness: 0.8,
+                metalness: 0.1,
+                flatShading: false
+            });
+
+            const mesh = new THREE.Mesh(geometry, material);
+            mesh.position.set(x, y, z);
+            mesh.castShadow = true;
+            mesh.receiveShadow = true;
+            mesh.userData = { key: key, type: type };
+
+            scene.add(mesh);
+            voxels.set(key, { mesh, type });
+            meshes.push(mesh);
+        }
+
+        function removeBlock(x, y, z) {
+            x = Math.round(x);
+            y = Math.round(y);
+            z = Math.round(z);
+            const key = getKey(x, y, z);
+
+            if (voxels.has(key)) {
+                const voxel = voxels.get(key);
+                scene.remove(voxel.mesh);
+                voxels.delete(key);
+                const idx = meshes.indexOf(voxel.mesh);
+                if (idx > -1) meshes.splice(idx, 1);
+            }
+        }
+
+        // Generate terrain
+        console.log("Generating terrain...");
+        for (let x = -15; x < 15; x++) {
+            for (let z = -15; z < 15; z++) {
+                const height = Math.floor(15 + 8 * Math.sin(x * 0.15) * Math.cos(z * 0.15) + Math.random() * 2);
+                for (let y = 0; y < height; y++) {
+                    const type = Math.floor(Math.random() * 3); // Random block types
+                    addBlock(x, y, z, type);
+                }
+            }
+        }
+        console.log("Terrain generated, blocks: " + voxels.size);
+
+        // Input
+        const keys = {};
+        window.addEventListener('keydown', (e) => {
+            keys[e.key.toLowerCase()] = true;
+        });
+        window.addEventListener('keyup', (e) => {
+            keys[e.key.toLowerCase()] = false;
+        });
+
+        // Mouse
+        let pitch = 0;
+        let yaw = 0;
+        let isLocked = false;
+
+        document.addEventListener('pointerlockchange', () => {
+            isLocked = document.pointerLockElement === document.body;
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (isLocked) {
+                yaw -= e.movementX * 0.003;
+                pitch -= e.movementY * 0.003;
+                pitch = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, pitch));
+            }
+        });
+
+        document.addEventListener('click', () => {
+            document.body.requestPointerLock();
+        });
+
+        // Raycasting
+        const raycaster = new THREE.Raycaster();
+
+        function raycast() {
+            const direction = new THREE.Vector3(0, 0, -1);
+            direction.applyAxisAngle(new THREE.Vector3(1, 0, 0), pitch);
+            direction.applyAxisAngle(new THREE.Vector3(0, 1, 0), yaw);
+
+            raycaster.set(camera.position, direction.normalize());
+            const hits = raycaster.intersectObjects(meshes);
+
+            return hits.length > 0 ? hits[0] : null;
+        }
+
+        // Mouse buttons
+        window.addEventListener('mousedown', (e) => {
+            if (!isLocked) return;
+
+            const hit = raycast();
+            if (!hit) return;
+
+            const pos = hit.object.position;
+
+            if (e.button === 0) {
+                // Left - destroy
+                removeBlock(pos.x, pos.y, pos.z);
+            } else if (e.button === 2) {
+                // Right - place
+                const normal = hit.face.normal.clone();
+                const newPos = {
+                    x: pos.x + normal.x,
+                    y: pos.y + normal.y,
+                    z: pos.z + normal.z
+                };
+                addBlock(newPos.x, newPos.y, newPos.z, player.blockType);
+            }
+        });
+
+        window.addEventListener('contextmenu', (e) => e.preventDefault());
+
+        // Scroll - change block
+        window.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            player.blockType += e.deltaY > 0 ? 1 : -1;
+            if (player.blockType < 0) player.blockType = blockTypes.length - 1;
+            player.blockType %= blockTypes.length;
+            document.getElementById('blocktype').textContent = blockTypeNames[player.blockType];
+        });
+
+        // Physics
+        const gravity = 0.018;
+
+        function updatePhysics() {
+            player.velocity.y -= gravity;
+
+            const moveDir = new THREE.Vector3();
+            if (keys['w']) moveDir.z -= 1;
+            if (keys['s']) moveDir.z += 1;
+            if (keys['a']) moveDir.x -= 1;
+            if (keys['d']) moveDir.x += 1;
+
+            if (moveDir.length() > 0) {
+                moveDir.normalize();
+                moveDir.applyAxisAngle(new THREE.Vector3(0, 1, 0), yaw);
+                moveDir.multiplyScalar(player.speed);
+                player.velocity.x = moveDir.x;
+                player.velocity.z = moveDir.z;
+            } else {
+                player.velocity.x *= 0.9;
+                player.velocity.z *= 0.9;
+            }
+
+            if (keys[' '] && player.isOnGround) {
+                player.velocity.y = player.jumpForce;
+                player.isOnGround = false;
+            }
+
+            player.position.add(player.velocity);
+
+            // Collision
+            player.isOnGround = false;
+            const checkDist = 0.5;
+
+            for (let voxel of voxels.values()) {
+                const blockPos = voxel.mesh.position;
+                const dist = Math.abs(player.position.y - blockPos.y);
+
+                if (dist < checkDist && player.position.distanceTo(blockPos) < 1.5) {
+                    if (player.velocity.y <= 0 && player.position.y > blockPos.y) {
+                        player.position.y = blockPos.y + 1.2;
+                        player.velocity.y = 0;
+                        player.isOnGround = true;
+                    }
+                }
+            }
+
+            if (player.position.y < -100) {
+                player.position.set(0, 30, 0);
+                player.velocity.set(0, 0, 0);
+            }
+
+            camera.position.copy(player.position);
+            camera.position.y += 1.6;
+        }
+
+        // Camera rotation
+        function updateCamera() {
+            camera.rotation.order = 'YXZ';
+            camera.rotation.y = yaw;
+            camera.rotation.x = pitch;
+        }
+
+        // UI
+        let lastTime = Date.now();
+        let frameCount = 0;
+
+        function updateUI() {
+            frameCount++;
+            const now = Date.now();
+
+            if (now - lastTime >= 1000) {
+                document.getElementById('fps').textContent = frameCount;
+                frameCount = 0;
+                lastTime = now;
+            }
+
+            const x = Math.round(player.position.x * 10) / 10;
+            const y = Math.round(player.position.y * 10) / 10;
+            const z = Math.round(player.position.z * 10) / 10;
+            document.getElementById('pos').textContent = `${x}, ${y}, ${z}`;
+            document.getElementById('blocks').textContent = voxels.size;
+        }
+
+        // Main loop
+        function animate() {
+            requestAnimationFrame(animate);
+            updatePhysics();
+            updateCamera();
+            updateUI();
+            renderer.render(scene, camera);
+        }
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        document.getElementById('loading').style.display = 'none';
+        animate();
+        console.log("Game started!");
+    </script>
+</body>
+</html>
