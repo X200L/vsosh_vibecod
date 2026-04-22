@@ -15,8 +15,27 @@
         --text-sec: #4b5563;
         --border: #d1e3f5;
         --shadow: 0 4px 12px rgba(0, 86, 179, 0.08);
+        
+        /* 🎨 Цвета статусов */
+        --winner-bg: #fffbeb;
+        --winner-text: #b45309;
+        --winner-border: #fcd34d;
+        
+        --prizer-bg: #eff6ff;
+        --prizer-text: #1d4ed8;
+        --prizer-border: #93c5fd;
+        
+        --participant-bg: #ecfdf5;
+        --participant-text: #047857;
+        --participant-border: #6ee7b7;
+        
+        --disqualified-bg: #fef2f2;
+        --disqualified-text: #b91c1c;
+        --disqualified-border: #fca5a5;
       }
+      
       * { margin: 0; padding: 0; box-sizing: border-box; }
+      
       body {
         font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         background: var(--bg);
@@ -287,25 +306,59 @@
         color: var(--text-sec);
         opacity: 0.6;
       }
-      .disqualified {
-        background: #fff5f5;
-        color: #c53030;
-      }
-      .disqualified td {
-        border-bottom: 1px solid #fed7d7;
-      }
-      .disqualified .score {
-        color: #c53030;
-      }
-      .disq-label {
+      
+      /* === STATUS BADGES === */
+      .status-badge {
         display: inline-block;
-        background: #fed7d7;
-        color: #c53030;
-        padding: 2px 8px;
-        border-radius: 4px;
+        padding: 2px 10px;
+        border-radius: 6px;
         font-size: 11px;
         font-weight: 700;
         margin-left: 8px;
+        border: 1px solid transparent;
+        vertical-align: middle;
+        transition: transform 0.15s ease;
+      }
+      .status-badge:hover {
+        transform: scale(1.05);
+      }
+      
+      /* 🥇 Победитель — золотой */
+      .status-winner {
+        background: var(--winner-bg);
+        color: var(--winner-text);
+        border-color: var(--winner-border);
+      }
+      
+      /* 🥈 Призёр — синий */
+      .status-prizer {
+        background: var(--prizer-bg);
+        color: var(--prizer-text);
+        border-color: var(--prizer-border);
+      }
+      
+      /* 🎖️ Участник — зелёный */
+      .status-participant {
+        background: var(--participant-bg);
+        color: var(--participant-text);
+        border-color: var(--participant-border);
+      }
+      
+      /* ⛔ Дисквалифицирован — красный */
+      .status-disqualified {
+        background: var(--disqualified-bg);
+        color: var(--disqualified-text);
+        border-color: var(--disqualified-border);
+      }
+      
+      .disqualified {
+        background: var(--disqualified-bg);
+      }
+      .disqualified td {
+        border-bottom: 1px solid var(--disqualified-border);
+      }
+      .disqualified .score {
+        color: var(--disqualified-text);
       }
 
       /* === FOOTER === */
@@ -321,6 +374,9 @@
         color: var(--blue-primary);
         text-decoration: none;
       }
+      .footer a:hover {
+        text-decoration: underline;
+      }
 
       @media (max-width: 700px) {
         .grid { grid-template-columns: 1fr; }
@@ -328,12 +384,14 @@
         .jury-card { padding: 20px; }
         .results-table { font-size: 13px; }
         .results-table th, .results-table td { padding: 10px 8px; }
+        .results-table th:nth-child(1) { width: 50px; }
+        .status-badge { margin-left: 4px; padding: 2px 6px; }
       }
     </style>
   </head>
   <body>
 
-    <!-- HEADER: только название, по центру, крупно -->
+    <!-- HEADER -->
     <header class="header">
       <div class="header-inner">
         <div class="logo-text">
@@ -346,18 +404,18 @@
 
     <!-- HERO -->
     <main class="hero">
-      <div class="badge">Проекты финалистов</div>
+      <div class="badge">✨ Проекты финалистов</div>
       <h2>Анонимная оценка работ</h2>
-      <p>Работы представлены в анонимном формате. Оценка проводится независимо по каждому проекту.</p>
+      <p>Работы представлены в анонимном формате. Оценка проводится независимо по каждому проекту жюри олимпиады.</p>
     </main>
 
     <!-- JURY INFO -->
     <section class="jury-section">
       <div class="jury-card">
-        <h3>Оргкомитет и жюри</h3>
+        <h3>🏛️ Оргкомитет и жюри</h3>
         <p>По решению оргкомитета <strong>Т-34</strong> было решено провести Всероссийскую Олимпиаду Школьников по вайбкоду.</p>
 
-        <h3>Состав оргкомитета</h3>
+        <h3>👥 Состав оргкомитета</h3>
         <ul>
           <li><strong>Председатель жюри</strong> — <span class="tag">@SIT_edu</span> преподаватель НИУ ВШЭ по направлению «вайбкод для чайников», доктор вайбкодерских наук.</li>
           <li><strong>Заместитель председателя жюри</strong> — <span class="tag">@artur_derr</span> Senior Vibecode Developer.</li>
@@ -382,12 +440,54 @@
     <!-- PARTICIPANTS -->
     <section class="container">
       <div class="grid">
-        <a href="1.html" class="card"><div class="card-arrow">→</div><div class="card-header"><div class="card-num">01</div><div class="card-title">Участник №1</div></div><div class="card-desc">Проект финалиста олимпиады по направлению «Вайбкод». Анонимная подача для объективной оценки.</div></a>
-        <a href="2.html" class="card"><div class="card-arrow">→</div><div class="card-header"><div class="card-num">02</div><div class="card-title">Участник №2</div></div><div class="card-desc">Проект финалиста олимпиады по направлению «Вайбкод». Анонимная подача для объективной оценки.</div></a>
-        <a href="3.html" class="card"><div class="card-arrow">→</div><div class="card-header"><div class="card-num">03</div><div class="card-title">Участник №3</div></div><div class="card-desc">Проект финалиста олимпиады по направлению «Вайбкод». Анонимная подача для объективной оценки.</div></a>
-        <a href="4.html" class="card"><div class="card-arrow">→</div><div class="card-header"><div class="card-num">04</div><div class="card-title">Участник №4</div></div><div class="card-desc">Проект финалиста олимпиады по направлению «Вайбкод». Анонимная подача для объективной оценки.</div></a>
-        <a href="5.html" class="card"><div class="card-arrow">→</div><div class="card-header"><div class="card-num">05</div><div class="card-title">Участник №5</div></div><div class="card-desc">Проект финалиста олимпиады по направлению «Вайбкод». Анонимная подача для объективной оценки.</div></a>
-        <a href="sad.html" class="card"><div class="card-arrow">→</div><div class="card-header"><div class="card-num">06</div><div class="card-title">Участник №6</div></div><div class="card-desc">Проект финалиста олимпиады по направлению «Вайбкод». Анонимная подача для объективной оценки.</div></a>
+        <a href="1.html" class="card">
+          <div class="card-arrow">→</div>
+          <div class="card-header">
+            <div class="card-num">01</div>
+            <div class="card-title">Участник №1</div>
+          </div>
+          <div class="card-desc">Проект финалиста олимпиады по направлению «Вайбкод». Анонимная подача для объективной оценки.</div>
+        </a>
+        <a href="2.html" class="card">
+          <div class="card-arrow">→</div>
+          <div class="card-header">
+            <div class="card-num">02</div>
+            <div class="card-title">Участник №2</div>
+          </div>
+          <div class="card-desc">Проект финалиста олимпиады по направлению «Вайбкод». Анонимная подача для объективной оценки.</div>
+        </a>
+        <a href="3.html" class="card">
+          <div class="card-arrow">→</div>
+          <div class="card-header">
+            <div class="card-num">03</div>
+            <div class="card-title">Участник №3</div>
+          </div>
+          <div class="card-desc">Проект финалиста олимпиады по направлению «Вайбкод». Анонимная подача для объективной оценки.</div>
+        </a>
+        <a href="4.html" class="card">
+          <div class="card-arrow">→</div>
+          <div class="card-header">
+            <div class="card-num">04</div>
+            <div class="card-title">Участник №4</div>
+          </div>
+          <div class="card-desc">Проект финалиста олимпиады по направлению «Вайбкод». Анонимная подача для объективной оценки.</div>
+        </a>
+        <a href="5.html" class="card">
+          <div class="card-arrow">→</div>
+          <div class="card-header">
+            <div class="card-num">05</div>
+            <div class="card-title">Участник №5</div>
+          </div>
+          <div class="card-desc">Проект финалиста олимпиады по направлению «Вайбкод». Анонимная подача для объективной оценки.</div>
+        </a>
+        <a href="sad.html" class="card">
+          <div class="card-arrow">→</div>
+          <div class="card-header">
+            <div class="card-num">06</div>
+            <div class="card-title">Участник №6</div>
+          </div>
+          <div class="card-desc">Проект финалиста олимпиады по направлению «Вайбкод». Анонимная подача для объективной оценки.</div>
+        </a>
       </div>
     </section>
 
@@ -410,74 +510,72 @@
           <tbody>
             <tr>
               <td>1</td>
-              <td>Никита Голубицкий
-              <span class="disq-label">ДИСКВАЛИФИЦИРОВАН</span>
+              <td>
+                Никита Голубицкий
+                <span class="status-badge status-winner">🥇 Победитель</span>
               </td>
               <td class="score">9</td>
-              <td class="score zero">18</td>
+              <td class="score">18</td>
               <td class="score zero">0</td>
-            </tr>
-      
-              <td>2</td>
-              <td>Prosto_prog
-              <span class="disq-label">ДИСКВАЛИФИЦИРОВАН</span>
-              </td>
-              <td class="score">6</td>
-              <td class="score zero">17</td>
-              <td class="score zero">4</td>
             </tr>
             <tr>
-
-              <tr>
+              <td>2</td>
+              <td>
+                Prosto_prog
+                <span class="status-badge status-winner">🥇 Победитель</span>
+              </td>
+              <td class="score">6</td>
+              <td class="score">17</td>
+              <td class="score">4</td>
+            </tr>
+            <tr>
               <td>3</td>
-              <td>Человек, который человек
-              <span class="disq-label">ДИСКВАЛИФИЦИРОВАН</span>
+              <td>
+                Человек, который человек
+                <span class="status-badge status-prizer">🥈 Призёр</span>
               </td>
               <td class="score">5</td>
-              <td class="score zero">15</td>
-              <td class="score zero">5</td>
+              <td class="score">15</td>
+              <td class="score">5</td>
             </tr>
-
-          <tr>
-
-            <td>4</td>
-              <td>Яков
-              <span class="disq-label">ДИСКВАЛИФИЦИРОВАН</span>
+            <tr>
+              <td>4</td>
+              <td>
+                Яков
+                <span class="status-badge status-prizer">🥈 Призёр</span>
               </td>
               <td class="score">6</td>
-              <td class="score zero">13</td>
+              <td class="score">13</td>
               <td class="score zero">0</td>
             </tr>
-          
+            <tr>
               <td>5</td>
-              <td>Михаил
-              <span class="disq-label">ДИСКВАЛИФИЦИРОВАН</span>
+              <td>
+                Михаил
+                <span class="status-badge status-prizer">🥈 Призёр</span>
               </td>
               <td class="score">4</td>
-              <td class="score zero">14</td>
+              <td class="score">14</td>
               <td class="score zero">0</td>
             </tr>
-          
-              
-
-          <td>6</td>
-              <td>Богдан
-              <span class="disq-label">ДИСКВАЛИФИЦИРОВАН</span>
+            <tr>
+              <td>6</td>
+              <td>
+                Богдан
+                <span class="status-badge status-participant">🎖️ Участник</span>
               </td>
               <td class="score">6</td>
-              <td class="score zero">5</td>
+              <td class="score">5</td>
               <td class="score zero">0</td>
             </tr>
-            
-             
             <tr class="disqualified">
               <td>—</td>
               <td>
                 Дерр Артур Евгеньевич
-                <span class="disq-label">ДИСКВАЛИФИЦИРОВАН</span>
+                <span class="status-badge status-disqualified">⛔ Дисквалифицирован</span>
               </td>
               <td class="score">—</td>
-              <td class="score zero">—</td>
+              <td class="score">—</td>
               <td class="score zero">—</td>
             </tr>
           </tbody>
