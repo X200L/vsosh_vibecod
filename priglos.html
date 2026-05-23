@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Олимпиада по вайбкодингу 2026</title>
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(135deg, #0e8594 0%, #176585 50%, #115273 100%);
+            --text-main: #ffffff;
+            --text-dark: #333333;
+            --accent-green: #2ecc71;
+            --card-bg: #ffffff;
+            --mint-green: #00bfa5;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            min-height: 100vh;
+            color: var(--text-main);
+            overflow-x: hidden;
+        }
+
+        /* Шапка */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            width: 100%;
+        }
+
+        .lang-select {
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--text-dark);
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        /* Главный контейнер */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+
+        /* --- СТРАНИЦА 1: ЛЕНДИНГ --- */
+        #landing-page {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+            padding-top: 40px;
+        }
+
+        .sub-title {
+            font-size: 16px;
+            letter-spacing: 1px;
+            opacity: 0.9;
+            text-transform: uppercase;
+        }
+
+        .main-title {
+            font-size: 36px;
+            font-weight: 600;
+            max-width: 700px;
+            line-height: 1.4;
+        }
+
+        .stats-grid {
+            display: flex;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            color: var(--text-dark);
+            padding: 20px 30px;
+            border-radius: 8px;
+            min-width: 140px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .stat-val {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-lbl {
+            font-size: 12px;
+            color: #777;
+        }
+
+        .action-box {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            padding: 25px 50px;
+            width: 100%;
+            max-width: 800px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .start-btn {
+            background: var(--accent-green);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 25px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(46, 204, 113, 0.4);
+            transition: transform 0.2s, background 0.2s;
+        }
+
+        .start-btn:hover {
+            transform: translateY(-2px);
+            background: #27ae60;
+        }
+
+        .info-section {
+            background: var(--mint-green);
+            width: 100vw;
+            margin-left: calc(-50vw + 50%);
+            padding: 50px 20px;
+            margin-top: 40px;
+            text-align: left;
+        }
+
+        .info-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .info-content h2 {
+            margin-bottom: 20px;
+            font-size: 28px;
+        }
+
+        .info-content p {
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .telegram-link {
+            font-size: 18px;
+            margin-top: 15px;
+        }
+
+        .telegram-link a {
+            color: white;
+            text-decoration: underline;
+        }
+
+        /* --- СТРАНИЦА 2: ТЕСТИРОВАНИЕ --- */
+        #test-page {
+            display: none;
+        }
+
+        .test-wrapper {
+            background: var(--card-bg);
+            color: var(--text-dark);
+            border-radius: 8px;
+            padding: 40px;
+            text-align: left;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            min-height: 400px;
+            margin-bottom: 30px;
+        }
+
+        .task-num {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+
+        .task-text {
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .input-wrapper {
+            background: #f5f5f5;
+            border-radius: 6px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            border: 1px solid #ddd;
+        }
+
+        .answer-input {
+            background: transparent;
+            border: none;
+            outline: none;
+            font-size: 16px;
+            width: 100%;
+            color: var(--text-dark);
+        }
+
+        .nav-arrow {
+            position: absolute;
+            right: -60px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 40px;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+
+        .nav-arrow:hover {
+            opacity: 1;
+        }
+
+        .status-line {
+            font-size: 14px;
+            color: #666;
+            margin-top: 40px;
+        }
+
+        /* Подвал с кнопками задач */
+        .test-footer {
+            background: #50316d;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 15px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .pagination {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .page-btn {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            border: none;
+            background: #7a599c;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        /* Стиль для посещенной/заполненной кнопки (опционально) */
+        .page-btn.filled { background: #9b59b6; }
+        .page-btn.active { outline: 2px solid white; transform: scale(1.1); box-shadow: 0 0 10px rgba(255,255,255,0.5); }
+
+        .total-count {
+            color: rgba(255,255,255,0.7);
+            font-size: 14px;
+            align-self: flex-end;
+            margin-right: 40px;
+            position: absolute;
+        }
+
+        /* Декоративные руки на фоне */
+        .bg-icon {
+            position: absolute;
+            z-index: -1;
+            opacity: 0.07;
+            pointer-events: none;
+        }
+        .bg-left { left: 5%; top: 20%; width: 200px; }
+        .bg-right { right: 5%; top: 20%; width: 200px; }
+    </style>
+</head>
+<body>
+
+    <svg class="bg-icon bg-left" viewBox="0 0 100 100"><path fill="white" d="M30,90 C30,70 40,50 50,30 C55,20 65,20 65,40 C65,50 55,60 50,70 Z M50,30 C45,15 60,5 70,20 C75,30 65,45 50,30 Z"/></svg>
+    <svg class="bg-icon bg-right" viewBox="0 0 100 100"><path fill="white" d="M70,90 C70,70 60,50 50,30 C45,20 35,20 35,40 C35,50 45,60 50,70 Z M50,30 C55,15 40,5 30,20 C25,30 35,45 50,30 Z"/></svg>
+
+    <header>
+        <select class="lang-select">
+            <option>Рус ▾</option>
+            <option>Eng ▾</option>
+        </select>
+        </header>
+
+    <main class="container">
+        
+        <section id="landing-page">
+            <div class="sub-title">Образовательный хаб «Вайбкод»</div>
+            <h1 class="main-title">Пригласительный этап ВсОШ 2025/26,<br>информатика (вайбкодинг), 7-11 класс</h1>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-val">5</div>
+                    <div class="stat-lbl">Заданий</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-val">28.05</div>
+                    <div class="stat-lbl">Стартует</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-val">90 мин</div>
+                    <div class="stat-lbl">Время</div>
+                </div>
+            </div>
+
+            <div class="action-box">
+                <button class="start-btn" onclick="startTest()">Принять участие</button>
+            </div>
+
+            <div class="info-section">
+                <div class="info-content">
+                    <h2>Олимпиада по вайбкодингу</h2>
+                    <p>Добро пожаловать на принципиально новый формат соревнований! Вайбкодинг — это не просто написание сухого кода по ТЗ. Это искусство создания работающих алгоритмов в условиях идеального ментального потока, когда разработчик интуитивно чувствует архитектуру системы.</p>
+                    <p>В рамках этого направления вам предстоит решать сложные задачи на стыке классического программирования, управления робототехническими комплексами и проектирования логических цепочек для автономных систем (включая БПЛА и микроконтроллеры).</p>
+                    <p>Приготовьтесь проявить нестандартное мышление, чилл-ориентированность и хакерскую смекалку. Удачи!</p>
+                    <p class="telegram-link">Присоединяйтесь к нашему <a href="https://t.me/vsoshvibe" target="_blank" rel="noopener noreferrer">Telegram-каналу олимпиады @vsoshvibe</a>.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="test-page">
+            <div class="test-wrapper">
+                <div class="task-num" id="task-title">№ 1</div>
+                <div class="task-text" id="task-desc">Текст задачи...</div>
+                
+                <div class="input-wrapper">
+                    <input type="text" class="answer-input" id="answer-field" placeholder="Введите ваш ответ" oninput="saveAnswer()">
+                </div>
+
+                <button class="nav-arrow" onclick="nextTask()">➔</button>
+                <div class="status-line" id="status-text">Задание 1 из 5</div>
+            </div>
+
+            <div class="test-footer">
+                <div class="pagination" id="pagination-container">
+                    </div>
+                <div class="total-count" id="total-count-text">Всего: 5</div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // Список из 5 не проверенных заданий (ответы изначально пустые)
+        const tasks = [
+            { num: 1, desc: "В вайбкодинге используется особый подход к построению алгоритмов. Что такое «вейв-функции» в этом контексте?", userAns: "" },
+            { num: 2, desc: "Опишите, как в вайбкодинге можно оптимизировать обработку данных для повышения производительности автономного робота.", userAns: "" },
+            { num: 3, desc: "Какие типы данных и структуры чаще всего используются в логическом программировании на вайбкод языке?", userAns: "" },
+            { num: 4, desc: "Вайбкодинг часто сочетает элементы императивного и декларативного стилей. Приведите пример задачи, где такой гибрид наиболее эффективен.", userAns: "" },
+            { num: 5, desc: "Объясните, как работает отладка и тестирование алгоритмов в среде вайбкодинга, учитывая особенности ментального потока.", userAns: "" }
+        ];
+
+        let currentTaskIdx = 0;
+
+        function startTest() {
+            document.getElementById('landing-page').style.display = 'none';
+            document.getElementById('test-page').style.display = 'block';
+            renderPagination();
+            loadTask(0);
+        }
+
+        function loadTask(idx) {
+            currentTaskIdx = idx;
+            const task = tasks[idx];
+            document.getElementById('task-title').innerText = `№ ${task.num}`;
+            document.getElementById('task-desc').innerText = task.desc;
+            document.getElementById('answer-field').value = task.userAns;
+            document.getElementById('status-text').innerText = `Задание ${task.num} из ${tasks.length}`;
+            
+            // Обновляем подсветку текущей вкладки
+            document.querySelectorAll('.page-btn').forEach((btn, i) => {
+                if(i === idx) btn.classList.add('active');
+                else btn.classList.remove('active');
+                
+                // Если задание заполнено пользователем, даем фиолетовый оттенок
+                if(tasks[i].userAns.trim() !== "") {
+                    btn.classList.add('filled');
+                } else {
+                    btn.classList.remove('filled');
+                }
+            });
+        }
+
+        function saveAnswer() {
+            tasks[currentTaskIdx].userAns = document.getElementById('answer-field').value;
+            // Обновляем визуальный статус в пагинации (заполнил или нет)
+            const activeBtn = document.querySelectorAll('.page-btn')[currentTaskIdx];
+            if(tasks[currentTaskIdx].userAns.trim() !== "") {
+                activeBtn.classList.add('filled');
+            } else {
+                activeBtn.classList.remove('filled');
+            }
+        }
+
+        function nextTask() {
+            let nextIdx = (currentTaskIdx + 1) % tasks.length;
+            loadTask(nextIdx);
+        }
+
+        function renderPagination() {
+            const container = document.getElementById('pagination-container');
+            container.innerHTML = '';
+            tasks.forEach((task, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'page-btn';
+                btn.innerText = task.num;
+                btn.onclick = () => loadTask(idx);
+                container.appendChild(btn);
+            });
+            document.getElementById('total-count-text').innerText = `Всего: ${tasks.length}`;
+        }
+    </script>
+</body>
+</html>
