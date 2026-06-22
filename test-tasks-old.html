@@ -1,0 +1,996 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Пригласительный тур - Вайбкодинг ВсОШ</title>
+    <style>
+      :root {
+        --primary-color: #2c3e50;
+        --accent-color: #00a8cc;
+        --accent-hover: #0090b0;
+        --bg-light: #f8f9fa;
+        --text-dark: #2c3e50;
+        --text-muted: #7f8c8d;
+        --white: #ffffff;
+        --shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        --transition: all 0.3s ease;
+        --success: #27ae60;
+        --error: #e74c3c;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+          Arial, sans-serif;
+      }
+
+      body {
+        background-color: #f5f7fa;
+        color: var(--text-dark);
+        line-height: 1.6;
+      }
+
+      /* Навигационная панель */
+      header {
+        background-color: var(--white);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 1000;
+      }
+
+      .nav-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 20px;
+      }
+
+      .logo {
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--primary-color);
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .logo span {
+        color: var(--accent-color);
+      }
+
+      nav ul {
+        display: flex;
+        list-style: none;
+        gap: 25px;
+      }
+
+      nav ul a {
+        text-decoration: none;
+        color: var(--text-dark);
+        font-weight: 500;
+        font-size: 15px;
+        transition: var(--transition);
+      }
+
+      nav ul a:hover,
+      nav ul a.active {
+        color: var(--accent-color);
+      }
+
+      .tg-btn {
+        background-color: #24a1de;
+        color: var(--white);
+        text-decoration: none;
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 14px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        transition: var(--transition);
+      }
+
+      .tg-btn:hover {
+        background-color: #1e87be;
+        transform: translateY(-1px);
+      }
+
+      /* Контейнер для контента */
+      .container {
+        max-width: 1000px;
+        margin: 100px auto 0;
+        padding: 40px 20px;
+      }
+
+      .page-title {
+        text-align: center;
+        margin-bottom: 50px;
+      }
+
+      .page-title h1 {
+        font-size: 36px;
+        margin-bottom: 10px;
+        color: var(--primary-color);
+      }
+
+      .page-title p {
+        font-size: 18px;
+        color: var(--text-muted);
+      }
+
+      /* Задание */
+      .task-card {
+        background: var(--white);
+        border-left: 5px solid var(--accent-color);
+        padding: 30px;
+        margin-bottom: 30px;
+        border-radius: 4px;
+        box-shadow: var(--shadow);
+      }
+
+      .task-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+
+      .task-number {
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--accent-color);
+      }
+
+      .task-difficulty {
+        font-size: 12px;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-weight: 600;
+        background-color: #e8f4f8;
+        color: var(--accent-color);
+      }
+
+      .task-title {
+        font-size: 22px;
+        font-weight: 700;
+        margin-bottom: 20px;
+        color: var(--primary-color);
+      }
+
+      .task-description {
+        color: #555;
+        margin-bottom: 20px;
+        line-height: 1.8;
+      }
+
+      .task-description p {
+        margin-bottom: 15px;
+      }
+
+      .code-block {
+        background-color: #f4f4f4;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 15px;
+        overflow-x: auto;
+        margin: 15px 0;
+        font-family: "Courier New", monospace;
+        font-size: 13px;
+        line-height: 1.4;
+      }
+
+      .example {
+        margin: 15px 0;
+        padding: 15px;
+        background-color: #f9f9f9;
+        border-left: 3px solid var(--accent-color);
+      }
+
+      .example-title {
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: var(--primary-color);
+      }
+
+      .example-content {
+        font-family: "Courier New", monospace;
+        font-size: 13px;
+        color: #333;
+      }
+
+      /* Форма для ввода ответа */
+      .answer-form {
+        margin-top: 25px;
+        padding-top: 25px;
+        border-top: 1px solid #eee;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      .form-label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: var(--primary-color);
+      }
+
+      .form-input,
+      .form-textarea {
+        width: 100%;
+        padding: 12px 15px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 15px;
+        font-family: inherit;
+        transition: var(--transition);
+      }
+
+      .form-input:focus,
+      .form-textarea:focus {
+        outline: none;
+        border-color: var(--accent-color);
+        box-shadow: 0 0 0 3px rgba(0, 168, 204, 0.1);
+      }
+
+      .form-textarea {
+        resize: vertical;
+        min-height: 120px;
+        font-family: "Courier New", monospace;
+        font-size: 13px;
+      }
+
+      /* Кнопки */
+      .button-group {
+        display: flex;
+        gap: 15px;
+        margin-top: 20px;
+      }
+
+      .btn {
+        padding: 12px 30px;
+        border: none;
+        border-radius: 4px;
+        font-weight: 600;
+        font-size: 15px;
+        cursor: pointer;
+        transition: var(--transition);
+        flex: 1;
+      }
+
+      .btn-submit {
+        background-color: var(--accent-color);
+        color: var(--white);
+        box-shadow: 0 4px 15px rgba(0, 168, 204, 0.2);
+      }
+
+      .btn-submit:hover {
+        background-color: var(--accent-hover);
+        transform: translateY(-2px);
+      }
+
+      .btn-reset {
+        background-color: #ecf0f1;
+        color: var(--text-dark);
+      }
+
+      .btn-reset:hover {
+        background-color: #d5dbdb;
+      }
+
+      /* Результат */
+      .feedback {
+        margin-top: 20px;
+        padding: 15px;
+        border-radius: 4px;
+        display: none;
+      }
+
+      .feedback.success {
+        background-color: #d4edda;
+        border: 1px solid #c3e6cb;
+        color: #155724;
+        display: block;
+      }
+
+      .feedback.error {
+        background-color: #f8d7da;
+        border: 1px solid #f5c6cb;
+        color: #721c24;
+        display: block;
+      }
+
+      /* Прогресс */
+      .progress-section {
+        background: var(--white);
+        padding: 20px;
+        margin-bottom: 30px;
+        border-radius: 4px;
+        box-shadow: var(--shadow);
+      }
+
+      .progress-title {
+        font-weight: 600;
+        margin-bottom: 15px;
+        color: var(--primary-color);
+      }
+
+      .progress-bar {
+        width: 100%;
+        height: 8px;
+        background-color: #e9ecef;
+        border-radius: 4px;
+        overflow: hidden;
+      }
+
+      .progress-fill {
+        height: 100%;
+        background-color: var(--accent-color);
+        width: 0%;
+        transition: width 0.3s ease;
+      }
+
+      .progress-text {
+        text-align: right;
+        font-size: 13px;
+        color: var(--text-muted);
+        margin-top: 8px;
+      }
+
+      /* Подвал */
+      footer {
+        background-color: var(--primary-color);
+        color: #bdc3c7;
+        padding: 40px 20px;
+        margin-top: 60px;
+        font-size: 14px;
+      }
+
+      .footer-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 20px;
+      }
+
+      .footer-links a {
+        color: #bdc3c7;
+        text-decoration: none;
+        margin-right: 20px;
+      }
+
+      .footer-links a:hover {
+        color: var(--white);
+      }
+
+      @media (max-width: 768px) {
+        .nav-container {
+          flex-direction: column;
+          gap: 15px;
+        }
+        nav ul {
+          flex-direction: column;
+          gap: 10px;
+        }
+        .page-title h1 {
+          font-size: 28px;
+        }
+        .button-group {
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="nav-container">
+        <a href="index.html" class="logo">ВсОШ <span>_Вайбкодинг</span></a>
+        <nav>
+          <ul>
+            <li><a href="index.html">Об олимпиаде</a></li>
+            <li>
+              <a href="test-tasks.html" class="active">Пригласительный тур</a>
+            </li>
+            <li>
+              <a href="https://t.me/vsoshvibe" target="_blank">Поддержка</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="page-title">
+        <h1>Пригласительный тур 2026</h1>
+        <p>Решите задания и проверьте ваши навыки программирования</p>
+      </div>
+
+      <div class="progress-section">
+        <div class="progress-title">Ваш прогресс</div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div class="progress-text">
+          <span id="progressText">0/10 решено</span>
+        </div>
+      </div>
+
+      <!-- Задание 1 -->
+      <div class="task-card">
+        <div class="task-header">
+          <span class="task-number">Задача 1</span>
+          <span class="task-difficulty">Легкая</span>
+        </div>
+        <h2 class="task-title">Охота на баги</h2>
+        <div class="task-description">
+          <p>
+            Молодой разработчик создал программу для учета товаров на складе.
+            Однако в коде присутствует несколько ошибок: логических,
+            синтаксических и связанных с работой данных.
+          </p>
+          <p>
+            Используя любые инструменты, включая AI-помощников, определите
+            <strong>общее количество ошибок в программе</strong>.
+          </p>
+          <p>
+            В ответе укажите <strong>одно целое число</strong> — количество
+            найденных ошибок.
+          </p>
+          <div class="code-block">
+            products = [ {"name": "Apple", "price": 100, "count": 5}, {"name":
+            "Banana", "price": 50, "count": 10}, {"name": "Orange", "price": 80,
+            "count": 3} ] def get_total_value(items): total = 0 for item in
+            items: total += item["price"] return value def find_product(items,
+            name): for item in items: if item["name"] == name.lower(): return
+            item def add_product(items, name, price, count): items.append({
+            "name": name, "price": count, "count": price })
+          </div>
+          <div class="example">
+            <div class="example-title">Формат ответа</div>
+            <div class="example-content">8</div>
+          </div>
+        </div>
+        <div class="answer-form">
+          <form onsubmit="submitAnswer(event, 'task1', 10)">
+            <div class="form-group">
+              <label class="form-label">Ваш ответ:</label>
+              <input
+                type="number"
+                class="form-input"
+                id="task1-input"
+                min="0"
+                required
+              />
+            </div>
+            <div class="button-group">
+              <button type="submit" class="btn btn-submit">Проверить</button>
+              <button type="reset" class="btn btn-reset">Очистить</button>
+            </div>
+            <div class="feedback" id="task1-feedback"></div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Задание 2 -->
+      <div class="task-card">
+        <div class="task-header">
+          <span class="task-number">Задача 2</span>
+          <span class="task-difficulty">Легкая</span>
+        </div>
+        <h2 class="task-title">Реверс-инжиниринг промпта</h2>
+        <div class="task-description">
+          <p>
+            Вам предоставлен исходный код готового веб-приложения. Необходимо
+            определить, какой промпт мог быть использован для его генерации с
+            помощью ИИ.
+          </p>
+          <p>
+            Разрешается использовать любые AI-инструменты и запускать код для
+            анализа.
+          </p>
+          <div class="example">
+            <div class="example-title">Требования</div>
+            <div class="example-content">
+              1. Изучить код приложения<br />2. Определить функциональность и
+              особенности<br />3. Составить промпт, который позволит получить
+              похожий результат
+            </div>
+          </div>
+        </div>
+        <div class="answer-form">
+          <form onsubmit="submitAnswer(event, 'task2', null, 'text')">
+            <div class="form-group">
+              <label class="form-label"
+                >Ваш промпт (максимум 2000 символов):</label
+              >
+              <textarea
+                class="form-textarea"
+                id="task2-input"
+                maxlength="2000"
+                placeholder="Напишите промпт для генерации веб-приложения..."
+                required
+              ></textarea>
+              <div
+                style="
+                  font-size: 12px;
+                  color: var(--text-muted);
+                  margin-top: 5px;
+                "
+              >
+                <span id="task2-chars">0</span>/2000
+              </div>
+            </div>
+            <div class="button-group">
+              <button type="submit" class="btn btn-submit">Отправить</button>
+              <button type="reset" class="btn btn-reset">Очистить</button>
+            </div>
+            <div class="feedback" id="task2-feedback"></div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Задание 3 -->
+      <div class="task-card">
+        <div class="task-header">
+          <span class="task-number">Задача 3</span>
+          <span class="task-difficulty">Сложная</span>
+        </div>
+        <h2 class="task-title">AI Startup за 30 минут</h2>
+        <div class="task-description">
+          <p>
+            Создайте минимально жизнеспособный продукт (MVP), решающий реальную
+            проблему пользователей, используя технологии искусственного
+            интеллекта.
+          </p>
+          <p>
+            За 30 минут необходимо придумать идею, разработать работающий
+            прототип и продемонстрировать его возможности.
+          </p>
+          <div class="example">
+            <div class="example-title">Требования к продукту</div>
+            <div class="example-content">
+              • Использует AI<br />• Решает практическую задачу<br />• Имеет
+              UI<br />• Принимает данные от пользователя<br />• Выдает полезный
+              результат
+            </div>
+          </div>
+        </div>
+        <div class="answer-form">
+          <form onsubmit="submitAnswer(event, 'task3', null, 'text')">
+            <div class="form-group">
+              <label class="form-label">Ссылка на проект / код:</label>
+              <input
+                type="url"
+                class="form-input"
+                id="task3-input"
+                placeholder="https://..."
+                required
+              />
+            </div>
+            <div class="button-group">
+              <button type="submit" class="btn btn-submit">
+                Отправить ссылку
+              </button>
+              <button type="reset" class="btn btn-reset">Очистить</button>
+            </div>
+            <div class="feedback" id="task3-feedback"></div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Задание 4 -->
+      <div class="task-card">
+        <div class="task-header">
+          <span class="task-number">Задача 4</span>
+          <span class="task-difficulty">Средняя</span>
+        </div>
+        <h2 class="task-title">Одним промптом</h2>
+        <div class="task-description">
+          <p>
+            Создайте браузерную игру UNO, используя только один запрос к ИИ.
+          </p>
+          <p>
+            Цель задания — продемонстрировать умение составлять подробные и
+            точные промпты.
+          </p>
+          <div class="example">
+            <div class="example-title">Требования к игре</div>
+            <div class="example-content">
+              • Графический интерфейс<br />• Ход игрока<br />• Компьютерный
+              соперник<br />• Основные правила UNO<br />• Определение победителя
+            </div>
+          </div>
+        </div>
+        <div class="answer-form">
+          <form onsubmit="submitAnswer(event, 'task4', null, 'text')">
+            <div class="form-group">
+              <label class="form-label">Ваш промпт:</label>
+              <textarea
+                class="form-textarea"
+                id="task4-input"
+                placeholder="Напишите детальный промпт для создания игры UNO..."
+                required
+              ></textarea>
+            </div>
+            <div class="button-group">
+              <button type="submit" class="btn btn-submit">Отправить</button>
+              <button type="reset" class="btn btn-reset">Очистить</button>
+            </div>
+            <div class="feedback" id="task4-feedback"></div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Задание 5 -->
+      <div class="task-card">
+        <div class="task-header">
+          <span class="task-number">Задача 5</span>
+          <span class="task-difficulty">Средняя</span>
+        </div>
+        <h2 class="task-title">Умный склад</h2>
+        <div class="task-description">
+          <p>
+            На складе находится N коробок. Для каждой коробки известен её вес.
+          </p>
+          <p>
+            Необходимо определить максимальное количество коробок, которое можно
+            погрузить в грузовик грузоподъёмностью K.
+          </p>
+          <div class="example">
+            <div class="example-title">Пример</div>
+            <div class="example-content">
+              <strong>Ввод:</strong><br />5 10<br />2 3 5 6 4<br /><br /><strong
+                >Вывод:</strong
+              ><br />3
+            </div>
+          </div>
+        </div>
+        <div class="answer-form">
+          <form onsubmit="submitAnswer(event, 'task5', 3)">
+            <div class="form-group">
+              <label class="form-label">Ваш ответ:</label>
+              <input
+                type="number"
+                class="form-input"
+                id="task5-input"
+                min="0"
+                required
+              />
+            </div>
+            <div class="button-group">
+              <button type="submit" class="btn btn-submit">Проверить</button>
+              <button type="reset" class="btn btn-reset">Очистить</button>
+            </div>
+            <div class="feedback" id="task5-feedback"></div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Задание 6 -->
+      <div class="task-card">
+        <div class="task-header">
+          <span class="task-number">Задача 6</span>
+          <span class="task-difficulty">Легкая</span>
+        </div>
+        <h2 class="task-title">Самый популярный символ</h2>
+        <div class="task-description">
+          <p>
+            Дана строка длиной до 1 000 000 символов, содержащая только
+            латинские буквы нижнего регистра.
+          </p>
+          <p>
+            Необходимо определить символ, который встречается чаще всего. Если
+            таких символов несколько, вывести лексикографически минимальный.
+          </p>
+          <div class="example">
+            <div class="example-title">Пример</div>
+            <div class="example-content">
+              <strong>Ввод:</strong><br />abracadabra<br /><br /><strong
+                >Вывод:</strong
+              ><br />a
+            </div>
+          </div>
+        </div>
+        <div class="answer-form">
+          <form onsubmit="submitAnswer(event, 'task6', 'a', 'char')">
+            <div class="form-group">
+              <label class="form-label">Ваш ответ (один символ):</label>
+              <input
+                type="text"
+                class="form-input"
+                id="task6-input"
+                maxlength="1"
+                required
+              />
+            </div>
+            <div class="button-group">
+              <button type="submit" class="btn btn-submit">Проверить</button>
+              <button type="reset" class="btn btn-reset">Очистить</button>
+            </div>
+            <div class="feedback" id="task6-feedback"></div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Задание 7 -->
+      <div class="task-card">
+        <div class="task-header">
+          <span class="task-number">Задача 7</span>
+          <span class="task-difficulty">Легкая</span>
+        </div>
+        <h2 class="task-title">Привет, Мир!</h2>
+        <div class="task-description">
+          <p>
+            Напишите программу, которая выводит "Привет мир!" на русском языке.
+          </p>
+          <p>Напишите код на любом языке программирования.</p>
+          <div class="example">
+            <div class="example-title">Ожидаемый результат</div>
+            <div class="example-content">
+              Программа должна вывести:<br />Привет мир!
+            </div>
+          </div>
+        </div>
+        <div class="answer-form">
+          <form onsubmit="submitAnswer(event, 'task7', null, 'text')">
+            <div class="form-group">
+              <label class="form-label">Ваш код:</label>
+              <textarea
+                class="form-textarea"
+                id="task7-input"
+                placeholder="Напишите код здесь..."
+                required
+              ></textarea>
+            </div>
+            <div class="button-group">
+              <button type="submit" class="btn btn-submit">Отправить</button>
+              <button type="reset" class="btn btn-reset">Очистить</button>
+            </div>
+            <div class="feedback" id="task7-feedback"></div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Задание 8 -->
+      <div class="task-card">
+        <div class="task-header">
+          <span class="task-number">Задача 8</span>
+          <span class="task-difficulty">Средняя</span>
+        </div>
+        <h2 class="task-title">Робот-доставщик</h2>
+        <div class="task-description">
+          <p>
+            Робот находится в точке (0, 0). Ему передаётся последовательность
+            команд: U (вверх), D (вниз), L (влево), R (вправо).
+          </p>
+          <p>
+            Определите минимальное количество шагов, которое потребуется роботу,
+            чтобы вернуться в начало координат после выполнения всех команд.
+          </p>
+          <div class="example">
+            <div class="example-title">Пример</div>
+            <div class="example-content">
+              <strong>Ввод:</strong><br />UURRRD<br /><br /><strong
+                >Вывод:</strong
+              ><br />4
+            </div>
+          </div>
+        </div>
+        <div class="answer-form">
+          <form onsubmit="submitAnswer(event, 'task8', 4)">
+            <div class="form-group">
+              <label class="form-label">Ваш ответ:</label>
+              <input
+                type="number"
+                class="form-input"
+                id="task8-input"
+                min="0"
+                required
+              />
+            </div>
+            <div class="button-group">
+              <button type="submit" class="btn btn-submit">Проверить</button>
+              <button type="reset" class="btn btn-reset">Очистить</button>
+            </div>
+            <div class="feedback" id="task8-feedback"></div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Задание 9 -->
+      <div class="task-card">
+        <div class="task-header">
+          <span class="task-number">Задача 9</span>
+          <span class="task-difficulty">Легкая</span>
+        </div>
+        <h2 class="task-title">Минимум на массиве</h2>
+        <div class="task-description">
+          <p>Найдите минимальное число в массиве целых чисел.</p>
+          <div class="example">
+            <div class="example-title">Пример</div>
+            <div class="example-content">
+              <strong>Ввод:</strong><br />5 2 8 1 9<br /><br /><strong
+                >Вывод:</strong
+              ><br />1
+            </div>
+          </div>
+        </div>
+        <div class="answer-form">
+          <form onsubmit="submitAnswer(event, 'task9', 1)">
+            <div class="form-group">
+              <label class="form-label">Ваш ответ:</label>
+              <input
+                type="number"
+                class="form-input"
+                id="task9-input"
+                required
+              />
+            </div>
+            <div class="button-group">
+              <button type="submit" class="btn btn-submit">Проверить</button>
+              <button type="reset" class="btn btn-reset">Очистить</button>
+            </div>
+            <div class="feedback" id="task9-feedback"></div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Задание 10 -->
+      <div class="task-card">
+        <div class="task-header">
+          <span class="task-number">Задача 10</span>
+          <span class="task-difficulty">Средняя</span>
+        </div>
+        <h2 class="task-title">Сломанный поиск</h2>
+        <div class="task-description">
+          <p>
+            Разработчик реализовал алгоритм двоичного поиска для определения
+            количества вхождений числа в отсортированный массив. Однако в
+            программе содержится ошибка.
+          </p>
+          <p>
+            Необходимо найти и исправить ошибку, затем определить результат
+            работы программы для примера: числа [1, 2, 2, 2, 3, 4, 4, 5, 5, 5,
+            5, 6, 7] и поиск числа 5.
+          </p>
+          <div class="example">
+            <div class="example-title">Ожидаемый результат</div>
+            <div class="example-content">Число 5 встречается 4 раза</div>
+          </div>
+        </div>
+        <div class="answer-form">
+          <form onsubmit="submitAnswer(event, 'task10', 4)">
+            <div class="form-group">
+              <label class="form-label">Ваш ответ:</label>
+              <input
+                type="number"
+                class="form-input"
+                id="task10-input"
+                min="0"
+                required
+              />
+            </div>
+            <div class="button-group">
+              <button type="submit" class="btn btn-submit">Проверить</button>
+              <button type="reset" class="btn btn-reset">Очистить</button>
+            </div>
+            <div class="feedback" id="task10-feedback"></div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <div class="footer-container">
+        <div>
+          <p>© 2026-2027 Профиль Вайбкодинг ВсОШ по информатике.</p>
+          <p style="font-size: 12px; margin-top: 5px; color: #95a5a6">
+            Пригласительный тур
+          </p>
+        </div>
+        <div class="footer-links">
+          <a href="index.html">Главная</a>
+          <a href="https://t.me/vsoshvibe" target="_blank">Поддержка</a>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // Хранилище ответов
+      const answers = JSON.parse(localStorage.getItem("taskAnswers")) || {};
+
+      // Загрузка сохраненных ответов при загрузке страницы
+      window.addEventListener("load", () => {
+        for (const [taskId, value] of Object.entries(answers)) {
+          const input = document.getElementById(`${taskId}-input`);
+          if (input) {
+            input.value = value;
+          }
+        }
+        updateProgress();
+
+        // Счетчик символов для задания 2
+        const task2Input = document.getElementById("task2-input");
+        if (task2Input) {
+          task2Input.addEventListener("input", () => {
+            document.getElementById("task2-chars").textContent =
+              task2Input.value.length;
+          });
+        }
+      });
+
+      function submitAnswer(e, taskId, expectedAnswer, type = "number") {
+        e.preventDefault();
+        const input = document.getElementById(`${taskId}-input`);
+        const feedback = document.getElementById(`${taskId}-feedback`);
+        const userAnswer = input.value.trim();
+
+        // Сохранение ответа
+        answers[taskId] = userAnswer;
+        localStorage.setItem("taskAnswers", JSON.stringify(answers));
+
+        // Для задач с проверяемыми ответами
+        if (expectedAnswer !== null) {
+          const isCorrect =
+            type === "number"
+              ? parseInt(userAnswer) === expectedAnswer
+              : userAnswer.toLowerCase() ===
+                String(expectedAnswer).toLowerCase();
+
+          if (isCorrect) {
+            feedback.textContent = "✓ Правильно! Спасибо за ответ.";
+            feedback.classList.remove("error");
+            feedback.classList.add("success");
+            feedback.style.display = "block";
+          } else {
+            feedback.textContent = `✗ Проверьте ваш ответ. (Ожидается: ${expectedAnswer})`;
+            feedback.classList.remove("success");
+            feedback.classList.add("error");
+            feedback.style.display = "block";
+          }
+        } else {
+          // Для задач, требующих субъективной оценки
+          feedback.textContent = "✓ Ответ отправлен. Спасибо за участие!";
+          feedback.classList.remove("error");
+          feedback.classList.add("success");
+          feedback.style.display = "block";
+        }
+
+        updateProgress();
+      }
+
+      function updateProgress() {
+        const taskInputs = document.querySelectorAll('[id$="-input"]');
+        let completed = 0;
+
+        taskInputs.forEach((input) => {
+          if (input.value.trim() !== "") {
+            completed++;
+          }
+        });
+
+        const total = taskInputs.length;
+        const percentage = (completed / total) * 100;
+
+        document.getElementById("progressFill").style.width = percentage + "%";
+        document.getElementById("progressText").textContent =
+          `${completed}/${total} решено`;
+      }
+    </script>
+  </body>
+</html>

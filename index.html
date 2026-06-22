@@ -1,526 +1,593 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Профиль Вайбкодинг ВсОШ по информатике</title>
     <style>
-        :root {
-            --primary-color: #2c3e50;
-            --accent-color: #00a8cc; /* Изменено на голубой */
-            --accent-hover: #0090b0;  /* Более темный голубой для hover-эффектов */
-            --bg-light: #f8f9fa;
-            --text-dark: #2c3e50;
-            --text-muted: #7f8c8d;
-            --white: #ffffff;
-            --shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-            --transition: all 0.3s ease;
-            --table-border: #dcdde1;
-        }
+      :root {
+        --primary-color: #2c3e50;
+        --accent-color: #00a8cc; /* Изменено на голубой */
+        --accent-hover: #0090b0; /* Более темный голубой для hover-эффектов */
+        --bg-light: #f8f9fa;
+        --text-dark: #2c3e50;
+        --text-muted: #7f8c8d;
+        --white: #ffffff;
+        --shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        --transition: all 0.3s ease;
+        --table-border: #dcdde1;
+      }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+          Arial, sans-serif;
+      }
 
-        body {
-            background-color: var(--white);
-            color: var(--text-dark);
-            line-height: 1.6;
-        }
+      body {
+        background-color: var(--white);
+        color: var(--text-dark);
+        line-height: 1.6;
+      }
 
-        /* Навигационная панель */
-        header {
-            background-color: var(--white);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            z-index: 1000;
-        }
+      /* Навигационная панель */
+      header {
+        background-color: var(--white);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 1000;
+      }
 
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 20px;
-        }
+      .nav-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 20px;
+      }
 
-        .logo {
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--primary-color);
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+      .logo {
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--primary-color);
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
 
-        .logo span {
-            color: var(--accent-color);
-        }
+      .logo span {
+        color: var(--accent-color);
+      }
 
-        .nav-right {
-            display: flex;
-            align-items: center;
-            gap: 25px;
-        }
+      .nav-right {
+        display: flex;
+        align-items: center;
+        gap: 25px;
+      }
 
-        nav ul {
-            display: flex;
-            list-style: none;
-            gap: 25px;
-        }
+      nav ul {
+        display: flex;
+        list-style: none;
+        gap: 25px;
+      }
 
-        nav ul a {
-            text-decoration: none;
-            color: var(--text-dark);
-            font-weight: 500;
-            font-size: 15px;
-            transition: var(--transition);
-        }
+      nav ul a {
+        text-decoration: none;
+        color: var(--text-dark);
+        font-weight: 500;
+        font-size: 15px;
+        transition: var(--transition);
+      }
 
-        nav ul a:hover, nav ul a.active {
-            color: var(--accent-color);
-        }
+      nav ul a:hover,
+      nav ul a.active {
+        color: var(--accent-color);
+      }
 
-        /* Кнопка Телеграма в шапке */
-        .tg-btn {
-            background-color: #24a1de;
-            color: var(--white);
-            text-decoration: none;
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            transition: var(--transition);
-        }
+      /* Кнопка Телеграма в шапке */
+      .tg-btn {
+        background-color: #24a1de;
+        color: var(--white);
+        text-decoration: none;
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 14px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        transition: var(--transition);
+      }
 
-        .tg-btn:hover {
-            background-color: #1e87be;
-            transform: translateY(-1px);
-        }
+      .tg-btn:hover {
+        background-color: #1e87be;
+        transform: translateY(-1px);
+      }
 
-        /* Главный экран (Hero Section) */
-        .hero {
-            padding: 150px 20px 60px 20px;
-            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
-            text-align: center;
-        }
+      /* Главный экран (Hero Section) */
+      .hero {
+        padding: 150px 20px 60px 20px;
+        background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+        text-align: center;
+      }
 
-        .hero-content {
-            max-width: 800px;
-            margin: 0 auto;
-        }
+      .hero-content {
+        max-width: 800px;
+        margin: 0 auto;
+      }
 
-        /* Контейнер для главного изображения */
-        .hero-image-box {
-            width: 100%;
-            max-width: 380px;
-            margin: 0 auto 25px auto;
-        }
+      /* Контейнер для главного изображения */
+      .hero-image-box {
+        width: 100%;
+        max-width: 380px;
+        margin: 0 auto 25px auto;
+      }
 
-        .hero-image-box img {
-            width: 100%;
-            height: auto;
-            display: block;
-            /* Фильтр перекрашивает фиолетовые элементы логотипа в сине-голубую гамму */
-            filter: hue-rotate(65deg) saturate(1.1);
-        }
+      .hero-image-box img {
+        width: 100%;
+        height: auto;
+        display: block;
+        /* Фильтр перекрашивает фиолетовые элементы логотипа в сине-голубую гамму */
+        filter: hue-rotate(65deg) saturate(1.1);
+      }
 
-        .hero h1 {
-            font-size: 38px;
-            font-weight: 800;
-            margin-bottom: 20px;
-            color: var(--primary-color);
-            line-height: 1.2;
-        }
+      .hero h1 {
+        font-size: 38px;
+        font-weight: 800;
+        margin-bottom: 20px;
+        color: var(--primary-color);
+        line-height: 1.2;
+      }
 
-        .hero p {
-            font-size: 18px;
-            color: var(--text-muted);
-            margin-bottom: 30px;
-        }
+      .hero p {
+        font-size: 18px;
+        color: var(--text-muted);
+        margin-bottom: 30px;
+      }
 
-        .btn {
-            display: inline-block;
-            background-color: var(--accent-color);
-            color: var(--white);
-            padding: 12px 35px;
-            border-radius: 6px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: var(--transition);
-            box-shadow: 0 4px 15px rgba(0, 168, 204, 0.2);
-        }
+      .btn {
+        display: inline-block;
+        background-color: var(--accent-color);
+        color: var(--white);
+        padding: 12px 35px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: var(--transition);
+        box-shadow: 0 4px 15px rgba(0, 168, 204, 0.2);
+      }
 
-        .btn:hover {
-            background-color: var(--accent-hover);
-            transform: translateY(-2px);
-        }
+      .btn:hover {
+        background-color: var(--accent-hover);
+        transform: translateY(-2px);
+      }
 
-        /* Основной контент секции About */
-        .section {
-            padding: 60px 20px 80px 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
+      /* Основной контент секции About */
+      .section {
+        padding: 60px 20px 80px 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
 
-        .section-title {
-            font-size: 32px;
-            font-weight: 700;
-            margin-bottom: 40px;
-            position: relative;
-            padding-bottom: 10px;
-        }
+      .section-title {
+        font-size: 32px;
+        font-weight: 700;
+        margin-bottom: 40px;
+        position: relative;
+        padding-bottom: 10px;
+      }
 
-        .section-title::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 50px;
-            height: 4px;
-            background-color: var(--accent-color);
-            border-radius: 2px;
-        }
+      .section-title::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 50px;
+        height: 4px;
+        background-color: var(--accent-color);
+        border-radius: 2px;
+      }
 
+      .about-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 50px;
+      }
+
+      @media (max-width: 768px) {
         .about-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 50px;
+          grid-template-columns: 1fr;
         }
+        .hero h1 {
+          font-size: 30px;
+        }
+        nav,
+        .tg-btn {
+          display: none;
+        }
+      }
 
-        @media (max-width: 768px) {
-            .about-grid {
-                grid-template-columns: 1fr;
-            }
-            .hero h1 { font-size: 30px; }
-            nav, .tg-btn { display: none; }
-        }
+      .about-text p {
+        margin-bottom: 20px;
+        font-size: 16px;
+        color: #34495e;
+        line-height: 1.8;
+      }
 
-        .about-text p {
-            margin-bottom: 20px;
-            font-size: 16px;
-            color: #34495e;
-            line-height: 1.8;
-        }
+      /* Таблица графика проведения */
+      .schedule-table {
+        width: 100%;
+        border-collapse: collapse;
+        background: var(--white);
+        color: var(--text-dark);
+        border-radius: 8px;
+        overflow: hidden;
+        margin: 30px 0;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+        border: 1px solid var(--table-border);
+      }
 
-        /* Таблица графика проведения */
-        .schedule-table {
-            width: 100%;
-            border-collapse: collapse;
-            background: var(--white);
-            color: var(--text-dark);
-            border-radius: 8px;
-            overflow: hidden;
-            margin: 30px 0;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.04);
-            border: 1px solid var(--table-border);
-        }
+      .schedule-table th,
+      .schedule-table td {
+        padding: 14px 18px;
+        text-align: left;
+        font-size: 15px;
+      }
 
-        .schedule-table th, .schedule-table td {
-            padding: 14px 18px;
-            text-align: left;
-            font-size: 15px;
-        }
+      .schedule-table th {
+        background-color: #f1f5f9;
+        color: #475569;
+        font-weight: 600;
+        border-bottom: 2px solid var(--table-border);
+      }
 
-        .schedule-table th {
-            background-color: #f1f5f9;
-            color: #475569;
-            font-weight: 600;
-            border-bottom: 2px solid var(--table-border);
-        }
+      .schedule-table td {
+        border-bottom: 1px solid var(--table-border);
+      }
 
-        .schedule-table td {
-            border-bottom: 1px solid var(--table-border);
-        }
+      .clickable-row {
+        cursor: pointer;
+        transition: background-color 0.2s;
+      }
 
-        .clickable-row {
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
+      .clickable-row:hover {
+        background-color: #f0f9ff;
+      }
 
-        .clickable-row:hover {
-            background-color: #f0f9ff;
-        }
+      .clickable-row td strong {
+        color: #0084a3;
+        text-decoration: underline;
+      }
 
-        .clickable-row td strong {
-            color: #0084a3;
-            text-decoration: underline;
-        }
+      /* Карточки этапов */
+      .stages-title {
+        margin-top: 40px;
+        margin-bottom: 25px;
+        font-size: 24px;
+      }
 
-        /* Карточки этапов */
-        .stages-title {
-            margin-top: 40px;
-            margin-bottom: 25px;
-            font-size: 24px;
-        }
+      .stages-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+        gap: 20px;
+      }
 
-        .stages-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-            gap: 20px;
-        }
+      .stage-card {
+        background-color: var(--bg-light);
+        border-left: 4px solid var(--accent-color);
+        padding: 25px;
+        border-radius: 0 8px 8px 0;
+        transition: var(--transition);
+      }
 
-        .stage-card {
-            background-color: var(--bg-light);
-            border-left: 4px solid var(--accent-color);
-            padding: 25px;
-            border-radius: 0 8px 8px 0;
-            transition: var(--transition);
-        }
+      .stage-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow);
+      }
 
-        .stage-card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow);
-        }
+      .stage-card h3 {
+        font-size: 18px;
+        margin-bottom: 10px;
+        color: var(--primary-color);
+      }
 
-        .stage-card h3 {
-            font-size: 18px;
-            margin-bottom: 10px;
-            color: var(--primary-color);
-        }
+      .stage-card p {
+        font-size: 14px;
+        color: var(--text-muted);
+      }
 
-        .stage-card p {
-            font-size: 14px;
-            color: var(--text-muted);
-        }
+      /* Сайдбар / Полезная информация */
+      .sidebar {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+      }
 
-        /* Сайдбар / Полезная информация */
-        .sidebar {
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-        }
+      .info-block {
+        background-color: var(--bg-light);
+        padding: 30px;
+        border-radius: 8px;
+      }
 
-        .info-block {
-            background-color: var(--bg-light);
-            padding: 30px;
-            border-radius: 8px;
-        }
+      .info-block h3 {
+        margin-bottom: 15px;
+        font-size: 18px;
+      }
 
-        .info-block h3 {
-            margin-bottom: 15px;
-            font-size: 18px;
-        }
+      .info-list {
+        list-style: none;
+      }
 
-        .info-list {
-            list-style: none;
-        }
+      .info-list li {
+        margin-bottom: 12px;
+        font-size: 14px;
+      }
 
-        .info-list li {
-            margin-bottom: 12px;
-            font-size: 14px;
-        }
+      .info-list a {
+        color: var(--accent-color);
+        text-decoration: none;
+        font-weight: 500;
+      }
 
-        .info-list a {
-            color: var(--accent-color);
-            text-decoration: none;
-            font-weight: 500;
-        }
+      .info-list a:hover {
+        text-decoration: underline;
+        color: var(--accent-hover);
+      }
 
-        .info-list a:hover {
-            text-decoration: underline;
-            color: var(--accent-hover);
-        }
+      /* Подвал */
+      footer {
+        background-color: var(--primary-color);
+        color: #bdc3c7;
+        padding: 40px 20px;
+        margin-top: 60px;
+        font-size: 14px;
+      }
 
-        /* Подвал */
-        footer {
-            background-color: var(--primary-color);
-            color: #bdc3c7;
-            padding: 40px 20px;
-            margin-top: 60px;
-            font-size: 14px;
-        }
+      .footer-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 20px;
+      }
 
-        .footer-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
+      .footer-links {
+        display: flex;
+        gap: 20px;
+      }
 
-        .footer-links {
-            display: flex;
-            gap: 20px;
-        }
+      .footer-links a {
+        color: #bdc3c7;
+        text-decoration: none;
+      }
 
-        .footer-links a {
-            color: #bdc3c7;
-            text-decoration: none;
-        }
-
-        .footer-links a:hover {
-            color: var(--white);
-        }
+      .footer-links a:hover {
+        color: var(--white);
+      }
     </style>
-</head>
-<body>
-
+  </head>
+  <body>
     <header>
-        <div class="nav-container">
-            <a href="#" class="logo">ВсОШ <span>_Вайбкодинг</span></a>
-            <div class="nav-right">
-                <nav>
-                    <ul>
-                        <li><a href="#about" class="active">Об олимпиаде</a></li>
-                        <li><a href="#schedule">График</a></li>
-                        <li><a href="#stages">Этапы</a></li>
-                        <li><a href="#documents">Документы</a></li>
-                    </ul>
-                </nav>
-                <a href="https://t.me/vsoshvibe" target="_blank" class="tg-btn">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21.5 2L2 11.5l6 2.5 11-7-8 8.5V22l4.5-4 5 3.5L21.5 2z"/></svg>
-                    @vsoshvibe
-                </a>
-            </div>
+      <div class="nav-container">
+        <a href="#" class="logo">ВсОШ <span>_Вайбкодинг</span></a>
+        <div class="nav-right">
+          <nav>
+            <ul>
+              <li><a href="#about" class="active">Об олимпиаде</a></li>
+              <li><a href="#schedule">График</a></li>
+              <li><a href="test-tasks.html">Пригласительный тур</a></li>
+              <li><a href="#documents">Документы</a></li>
+            </ul>
+          </nav>
+          <a href="https://t.me/vsoshvibe" target="_blank" class="tg-btn">
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+            >
+              <path
+                d="M21.5 2L2 11.5l6 2.5 11-7-8 8.5V22l4.5-4 5 3.5L21.5 2z"
+              />
+            </svg>
+            @vsoshvibe
+          </a>
         </div>
+      </div>
     </header>
 
     <section class="hero">
-        <div class="hero-content">
-            <div class="hero-image-box">
-                <img src="https://vserosinf.ru/img/main_img.png" alt="ВсОШ Вайбкодинг">
-            </div>
-            <h1>Профиль Вайбкодинг ВсОШ по информатике</h1>
-            <p>Главное интеллектуальное соревнование для школьников, готовых проектировать чистый код, чувствовать архитектуру систем и внедрять передовые алгоритмы автоматизации.</p>
-            <a href="priglos.html" class="btn">Принять участие</a>
+      <div class="hero-content">
+        <div class="hero-image-box">
+          <img
+            src="https://vserosinf.ru/img/main_img.png"
+            alt="ВсОШ Вайбкодинг"
+          />
         </div>
+        <h1>Профиль Вайбкодинг ВсОШ по информатике</h1>
+        <p>
+          Главное интеллектуальное соревнование для школьников, готовых
+          проектировать чистый код, чувствовать архитектуру систем и внедрять
+          передовые алгоритмы автоматизации.
+        </p>
+        <a href="test-tasks.html" class="btn">Принять участие</a>
+      </div>
     </section>
 
     <section class="section" id="about">
-        <h2 class="section-title">Об олимпиаде</h2>
-        
-        <div class="about-grid">
-            <div class="about-main">
-                <div class="about-text">
-                    <p>Всероссийская олимпиада школьников по вайбкодингу — престижная экосистема для молодых разработчиков, инженеров и исследователей. В эпоху стремительного развития ИТ-технологий стандартных навыков синтаксиса становится недостаточно. Наша цель — находить таланты, способные находиться в ментальном потоке созидания и конструировать безотказную логику систем.</p>
-                    <p>Олимпиада предоставляет уникальную возможность проверить свои силы в решении нестандартных задач на стыке классического спортивного программирования, микроконтроллерных систем, веб-интеграций (React/Flask) и алгоритмов компьютерного зрения.</p>
-                    <p>Дипломы победителей и призеров заключительного этапа предоставляют официальные льготы и преимущества при поступлении в ведущие университеты страны на профильные направления подготовки.</p>
-                </div>
+      <h2 class="section-title">Об олимпиаде</h2>
 
-                <h3 class="stages-title" id="schedule">График проведения на 2026-2027 уч. год</h3>
-                <table class="schedule-table">
-                    <thead>
-                        <tr>
-                            <th>Этап</th>
-                            <th>Дата проведения</th>
-                            <th>Формат</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr class="clickable-row" onclick="window.location.href='priglos.html'">
-                            <td><strong>Пригласительный тур ➔</strong></td>
-                            <td>28 – 30 мая 2026</td>
-                            <td>Онлайн</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Первый отборочный этап</strong></td>
-                            <td>12 – 15 октября 2026</td>
-                            <td>Онлайн</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Второй отборочный этап</strong></td>
-                            <td>23 – 25 января 2027</td>
-                            <td>Онлайн</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Заключительный этап (Финал)</strong></td>
-                            <td>18 – 20 марта 2027</td>
-                            <td>Очно (Москва)</td>
-                        </tr>
-                    </tbody>
-                </table>
+      <div class="about-grid">
+        <div class="about-main">
+          <div class="about-text">
+            <p>
+              Всероссийская олимпиада школьников по вайбкодингу — престижная
+              экосистема для молодых разработчиков, инженеров и исследователей.
+              В эпоху стремительного развития ИТ-технологий стандартных навыков
+              синтаксиса становится недостаточно. Наша цель — находить таланты,
+              способные находиться в ментальном потоке созидания и
+              конструировать безотказную логику систем.
+            </p>
+            <p>
+              Олимпиада предоставляет уникальную возможность проверить свои силы
+              в решении нестандартных задач на стыке классического спортивного
+              программирования, микроконтроллерных систем, веб-интеграций
+              (React/Flask) и алгоритмов компьютерного зрения.
+            </p>
+            <p>
+              Дипломы победителей и призеров заключительного этапа предоставляют
+              официальные льготы и преимущества при поступлении в ведущие
+              университеты страны на профильные направления подготовки.
+            </p>
+          </div>
 
-                <h3 class="stages-title" id="stages">Описание основных этапов</h3>
-                <div class="stages-grid">
-                    <div class="stage-card">
-                        <h3>Школьный этап</h3>
-                        <p>Сентябрь — Октябрь</p>
-                        <p style="margin-top: 5px; font-size: 13px;">Доступен для всех желающих учеников 5–11 классов. Проводится дистанционно.</p>
-                    </div>
-                    <div class="stage-card">
-                        <h3>Муниципальный этап</h3>
-                        <p>Ноябрь — Декабрь</p>
-                        <p style="margin-top: 5px; font-size: 13px;">Для участников, набравших проходной балл, а также победителей прошлого года.</p>
-                    </div>
-                    <div class="stage-card">
-                        <h3>Региональный этап</h3>
-                        <p>Январь — Февраль</p>
-                        <p style="margin-top: 5px; font-size: 13px;">Серьезный практический тур на специализированных олимпиадных платформах.</p>
-                    </div>
-                </div>
+          <h3 class="stages-title" id="schedule">
+            График проведения на 2026-2027 уч. год
+          </h3>
+          <table class="schedule-table">
+            <thead>
+              <tr>
+                <th>Этап</th>
+                <th>Дата проведения</th>
+                <th>Формат</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                class="clickable-row"
+                onclick="window.location.href = 'test-tasks.html'"
+              >
+                <td><strong>Пригласительный тур ➔</strong></td>
+                <td>28 – 30 мая 2026</td>
+                <td>Онлайн</td>
+              </tr>
+              <tr>
+                <td><strong>Первый отборочный этап</strong></td>
+                <td>12 – 15 октября 2026</td>
+                <td>Онлайн</td>
+              </tr>
+              <tr>
+                <td><strong>Второй отборочный этап</strong></td>
+                <td>23 – 25 января 2027</td>
+                <td>Онлайн</td>
+              </tr>
+              <tr>
+                <td><strong>Заключительный этап (Финал)</strong></td>
+                <td>18 – 20 марта 2027</td>
+                <td>Очно (Москва)</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3 class="stages-title" id="stages">Описание основных этапов</h3>
+          <div class="stages-grid">
+            <div class="stage-card">
+              <h3>Школьный этап</h3>
+              <p>Сентябрь — Октябрь</p>
+              <p style="margin-top: 5px; font-size: 13px">
+                Доступен для всех желающих учеников 5–11 классов. Проводится
+                дистанционно.
+              </p>
             </div>
-
-            <div class="sidebar">
-                <div class="info-block" id="documents">
-                    <h3>Материалы и документы</h3>
-                    <ul class="info-list">
-                        <li>📄 <a href="#">Регламент проведения 2026/27</a></li>
-                        <li>📄 <a href="#">Требования к софту и окружению</a></li>
-                        <li>📄 <a href="#">Архив задач прошлых лет</a></li>
-                        <li>📄 <a href="#">Порядок рассмотрения апелляций</a></li>
-                    </ul>
-                </div>
-
-                <div class="info-block" id="contacts">
-                    <h3>Контакты оргкомитета</h3>
-                    <ul class="info-list">
-                        <li>📍 Telegram: <a href="https://t.me/vsoshvibe" target="_blank"><strong>@vsoshvibe</strong></a></li>
-                        <li>✉️ E-mail: <a href="mailto:support@viberosinf.ru">support@viberosinf.ru</a></li>
-                        <li>🌐 Техподдержка работает в дни проведения туров 24/7.</li>
-                    </ul>
-                </div>
+            <div class="stage-card">
+              <h3>Муниципальный этап</h3>
+              <p>Ноябрь — Декабрь</p>
+              <p style="margin-top: 5px; font-size: 13px">
+                Для участников, набравших проходной балл, а также победителей
+                прошлого года.
+              </p>
             </div>
+            <div class="stage-card">
+              <h3>Региональный этап</h3>
+              <p>Январь — Февраль</p>
+              <p style="margin-top: 5px; font-size: 13px">
+                Серьезный практический тур на специализированных олимпиадных
+                платформах.
+              </p>
+            </div>
+          </div>
         </div>
+
+        <div class="sidebar">
+          <div class="info-block" id="documents">
+            <h3>Материалы и документы</h3>
+            <ul class="info-list">
+              <li>📄 <a href="#">Регламент проведения 2026/27</a></li>
+              <li>📄 <a href="#">Требования к софту и окружению</a></li>
+              <li>📄 <a href="#">Архив задач прошлых лет</a></li>
+              <li>📄 <a href="#">Порядок рассмотрения апелляций</a></li>
+            </ul>
+          </div>
+
+          <div class="info-block" id="contacts">
+            <h3>Контакты оргкомитета</h3>
+            <ul class="info-list">
+              <li>
+                📍 Telegram:
+                <a href="https://t.me/vsoshvibe" target="_blank"
+                  ><strong>@vsoshvibe</strong></a
+                >
+              </li>
+              <li>
+                ✉️ E-mail:
+                <a href="mailto:support@viberosinf.ru">support@viberosinf.ru</a>
+              </li>
+              <li>🌐 Техподдержка работает в дни проведения туров 24/7.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </section>
 
     <footer>
-        <div class="footer-container">
-            <div>
-                <p>© 2026-2027 Профиль Вайбкодинг ВсОШ по информатике.</p>
-                <p style="font-size: 12px; margin-top: 5px; color: #95a5a6;">Официальный информационный ресурс.</p>
-            </div>
-            <div class="footer-links">
-                <a href="#about">Главная</a>
-                <a href="#schedule">График</a>
-                <a href="#documents">Правила</a>
-            </div>
+      <div class="footer-container">
+        <div>
+          <p>© 2026-2027 Профиль Вайбкодинг ВсОШ по информатике.</p>
+          <p style="font-size: 12px; margin-top: 5px; color: #95a5a6">
+            Официальный информационный ресурс.
+          </p>
         </div>
+        <div class="footer-links">
+          <a href="#about">Главная</a>
+          <a href="#schedule">График</a>
+          <a href="#documents">Правила</a>
+          <a href="https://t.me/vsoshvibe" target="_blank">Архив 2025</a>
+        </div>
+      </div>
     </footer>
 
     <script>
-        window.addEventListener('scroll', () => {
-            let scrollDistance = window.scrollY;
-            
-            document.querySelectorAll('section, .hero').forEach((el) => {
-                if (el.offsetTop - 150 <= scrollDistance) {
-                    document.querySelectorAll('nav a').forEach((el) => {
-                        if (el.classList.contains('active')) {
-                            el.classList.remove('active');
-                        }
-                    });
-                    
-                    const id = el.getAttribute('id');
-                    if(id) {
-                        const activeLink = document.querySelector(`nav a[href="#${id}"]`);
-                        if(activeLink) activeLink.classList.add('active');
-                    }
-                }
+      window.addEventListener("scroll", () => {
+        let scrollDistance = window.scrollY;
+
+        document.querySelectorAll("section, .hero").forEach((el) => {
+          if (el.offsetTop - 150 <= scrollDistance) {
+            document.querySelectorAll("nav a").forEach((el) => {
+              if (el.classList.contains("active")) {
+                el.classList.remove("active");
+              }
             });
+
+            const id = el.getAttribute("id");
+            if (id) {
+              const activeLink = document.querySelector(`nav a[href="#${id}"]`);
+              if (activeLink) activeLink.classList.add("active");
+            }
+          }
         });
+      });
     </script>
-</body>
+  </body>
 </html>

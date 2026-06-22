@@ -1,0 +1,889 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Пригласительный тур — Вайбкодинг ВсОШ</title>
+  <style>
+    :root {
+      --primary: #2c3e50;
+      --accent: #00a8cc;
+      --accent-h: #0090b0;
+      --bg: #f5f7fa;
+      --white: #fff;
+      --shadow: 0 4px 20px rgba(0,0,0,.06);
+      --success: #27ae60;
+      --error: #e74c3c;
+      --warn: #f39c12;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background: var(--bg); color: var(--primary); line-height: 1.6; }
+
+    /* ── header ── */
+    header { background: var(--white); box-shadow: 0 2px 10px rgba(0,0,0,.05);
+             position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; }
+    .nav-container { max-width: 1100px; margin: 0 auto;
+                     display: flex; justify-content: space-between; align-items: center;
+                     padding: 14px 20px; }
+    .logo { font-size: 20px; font-weight: 700; color: var(--primary); text-decoration: none; }
+    .logo span { color: var(--accent); }
+    nav ul { display: flex; list-style: none; gap: 22px; }
+    nav ul a { text-decoration: none; color: var(--primary); font-weight: 500; font-size: 15px; }
+    nav ul a:hover, nav ul a.active { color: var(--accent); }
+
+    /* ── main container ── */
+    .container { max-width: 1000px; margin: 90px auto 0; padding: 40px 20px 80px; }
+    .page-title { text-align: center; margin-bottom: 40px; }
+    .page-title h1 { font-size: 34px; margin-bottom: 8px; }
+    .page-title p { font-size: 17px; color: #7f8c8d; }
+
+    /* ── progress ── */
+    .progress-section { background: var(--white); padding: 20px 25px;
+                        margin-bottom: 30px; border-radius: 6px; box-shadow: var(--shadow); }
+    .progress-bar { width: 100%; height: 8px; background: #e9ecef;
+                    border-radius: 4px; overflow: hidden; margin: 10px 0 6px; }
+    .progress-fill { height: 100%; background: var(--accent); width: 0%; transition: width .3s; }
+    .progress-text { font-size: 13px; color: #7f8c8d; text-align: right; }
+
+    /* ── task card ── */
+    .task-card { background: var(--white); border-left: 5px solid var(--accent);
+                 padding: 30px; margin-bottom: 30px; border-radius: 4px; box-shadow: var(--shadow); }
+    .task-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .task-number { font-size: 22px; font-weight: 700; color: var(--accent); }
+    .task-badge { font-size: 12px; padding: 4px 12px; border-radius: 20px; font-weight: 600;
+                  background: #e8f4f8; color: var(--accent); }
+    .task-badge.hard { background: #fdecea; color: var(--error); }
+    .task-badge.medium { background: #fef9e7; color: var(--warn); }
+    .task-badge.code { background: #eafaf1; color: var(--success); }
+    .task-title { font-size: 21px; font-weight: 700; margin-bottom: 18px; }
+    .task-desc { color: #555; line-height: 1.8; }
+    .task-desc p { margin-bottom: 12px; }
+    .task-desc strong { color: var(--primary); }
+
+    /* ── code block ── */
+    .code-block { background: #f4f4f4; border: 1px solid #ddd; border-radius: 4px;
+                  padding: 14px; overflow-x: auto; margin: 12px 0;
+                  font-family: "Courier New", monospace; font-size: 13px; line-height: 1.5;
+                  white-space: pre; }
+    .example { margin: 14px 0; padding: 14px; background: #f9f9f9;
+               border-left: 3px solid var(--accent); }
+    .example-title { font-weight: 600; margin-bottom: 6px; }
+    .example-content { font-family: "Courier New", monospace; font-size: 13px; }
+
+    /* ── answer form ── */
+    .answer-form { margin-top: 22px; padding-top: 22px; border-top: 1px solid #eee; }
+    .form-label { display: block; font-weight: 600; margin-bottom: 7px; }
+    .form-input { width: 100%; padding: 11px 14px; border: 1px solid #ddd;
+                  border-radius: 4px; font-size: 15px; transition: border-color .2s; }
+    .form-input:focus { outline: none; border-color: var(--accent);
+                        box-shadow: 0 0 0 3px rgba(0,168,204,.1); }
+    .form-textarea { width: 100%; padding: 11px 14px; border: 1px solid #ddd;
+                     border-radius: 4px; font-size: 14px; resize: vertical;
+                     min-height: 130px; font-family: inherit; transition: border-color .2s; }
+    .form-textarea:focus { outline: none; border-color: var(--accent);
+                           box-shadow: 0 0 0 3px rgba(0,168,204,.1); }
+    .char-count { font-size: 12px; color: #7f8c8d; margin-top: 4px; text-align: right; }
+
+    /* ── code editor ── */
+    .code-editor { width: 100%; padding: 12px 14px; border: 1px solid #ddd;
+                   border-radius: 4px; font-size: 13px; resize: vertical;
+                   min-height: 180px; font-family: "Courier New", monospace;
+                   background: #1e1e1e; color: #d4d4d4; transition: border-color .2s; }
+    .code-editor:focus { outline: none; border-color: var(--accent); }
+    .lang-tabs { display: flex; gap: 8px; margin-bottom: 8px; }
+    .lang-tab { padding: 5px 14px; border: 1px solid #ddd; border-radius: 4px;
+                background: #f5f5f5; cursor: pointer; font-size: 13px; font-weight: 600; }
+    .lang-tab.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+    /* ── buttons ── */
+    .button-group { display: flex; gap: 12px; margin-top: 18px; flex-wrap: wrap; }
+    .btn { padding: 11px 26px; border: none; border-radius: 4px; font-weight: 600;
+           font-size: 14px; cursor: pointer; transition: all .2s; }
+    .btn-submit { background: var(--accent); color: #fff; }
+    .btn-submit:hover { background: var(--accent-h); transform: translateY(-1px); }
+    .btn-run { background: var(--success); color: #fff; }
+    .btn-run:hover { background: #219a52; transform: translateY(-1px); }
+    .btn-reset { background: #ecf0f1; color: var(--primary); }
+    .btn-reset:hover { background: #d5dbdb; }
+
+    /* ── feedback ── */
+    .feedback { margin-top: 16px; padding: 13px 16px; border-radius: 4px; display: none; font-size: 14px; }
+    .feedback.success { background: #d4edda; border: 1px solid #c3e6cb; color: #155724; display: block; }
+    .feedback.error   { background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; display: block; }
+    .feedback.info    { background: #d1ecf1; border: 1px solid #bee5eb; color: #0c5460; display: block; }
+    .feedback.warn    { background: #fff3cd; border: 1px solid #ffeeba; color: #856404; display: block; }
+
+    /* ── test results ── */
+    .test-results { margin-top: 14px; }
+    .test-case { display: flex; align-items: center; gap: 10px; padding: 8px 12px;
+                 border-radius: 4px; margin-bottom: 6px; font-size: 13px; font-family: monospace; }
+    .test-case.pass { background: #d4edda; color: #155724; }
+    .test-case.fail { background: #f8d7da; color: #721c24; }
+    .test-case.running { background: #fff3cd; color: #856404; }
+    .test-icon { font-size: 16px; flex-shrink: 0; }
+
+    /* ── file upload ── */
+    .file-upload-area { border: 2px dashed #ddd; border-radius: 6px; padding: 20px;
+                        text-align: center; cursor: pointer; transition: border-color .2s;
+                        background: #fafafa; margin-top: 10px; }
+    .file-upload-area:hover { border-color: var(--accent); }
+    .file-upload-area input[type=file] { display: none; }
+    .file-upload-label { color: var(--accent); font-weight: 600; cursor: pointer; }
+    .file-name { font-size: 13px; color: #7f8c8d; margin-top: 6px; }
+
+    /* ── footer ── */
+    footer { background: var(--primary); color: #bdc3c7; padding: 36px 20px; margin-top: 60px; font-size: 14px; }
+    .footer-container { max-width: 1100px; margin: 0 auto;
+                        display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+    .footer-links a { color: #bdc3c7; text-decoration: none; margin-right: 18px; }
+    .footer-links a:hover { color: #fff; }
+
+    @media (max-width: 700px) {
+      .button-group { flex-direction: column; }
+      nav { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="nav-container">
+    <a href="index.html" class="logo">ВсОШ <span>_Вайбкодинг</span></a>
+    <nav>
+      <ul>
+        <li><a href="index.html">Об олимпиаде</a></li>
+        <li><a href="test-tasks.html" class="active">Пригласительный тур</a></li>
+        <li><a href="https://t.me/vsoshvibe" target="_blank">Поддержка</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<div class="container">
+  <div class="page-title">
+    <h1>Пригласительный тур 2026</h1>
+    <p>Решите задания и проверьте ваши навыки</p>
+  </div>
+
+  <div class="progress-section">
+    <strong>Ваш прогресс</strong>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="progress-text"><span id="progressText">0 / 10 решено</span></div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       ЗАДАЧА 1 — Охота на баги (числовой ответ, автопроверка)
+  ═══════════════════════════════════════════════════════════ -->
+  <div class="task-card">
+    <div class="task-header">
+      <span class="task-number">Задача 1</span>
+      <span class="task-badge">Лёгкая</span>
+    </div>
+    <h2 class="task-title">Охота на баги</h2>
+    <div class="task-desc">
+      <p>Молодой разработчик создал программу для учёта товаров на складе. В коде присутствует несколько ошибок: логических, синтаксических и связанных с работой данных.</p>
+      <p>Используя любые инструменты, включая AI-помощников, определите <strong>общее количество ошибок</strong> в программе.</p>
+      <p>В ответе укажите <strong>одно целое число</strong>.</p>
+      <div class="code-block">products = [
+    {"name": "Apple",  "price": 100, "count": 5},
+    {"name": "Banana", "price": 50,  "count": 10},
+    {"name": "Orange", "price": 80,  "count": 3}
+]
+
+def get_total_value(items):
+    total = 0
+    for item in items:
+        total += item["price"]
+    return value                        # ← ?
+
+def find_product(items, name):
+    for item in items:
+        if item["name"] == name.lower():  # ← ?
+            return item
+
+def add_product(items, name, price, count):
+    items.append({
+        "name": name,
+        "price": count,   # ← ?
+        "count": price    # ← ?
+    })
+
+def remove_product(items, name):
+    for item in items:
+        if item["name"] == name:
+            items.remove(name)  # ← ?
+
+def apply_discount(items, percent):
+    for item in items:
+        item["price"] *= percent / 100  # ← ?
+
+def get_average_price(items):
+    total = 0
+    for item in items:
+        total += item["price"]
+    return total / 0  # ← ?
+
+def print_products(items):
+    for i in range(len(items) + 1):  # ← ?
+        print(items[i]["name"], items[i]["price"], items[i]["count"])
+
+product = find_product(products, "Apple")
+if product:
+    print(product["title"])  # ← ?
+
+add_product(products, "Pear", 120, 7)
+print("Total value:", get_total_value(products))
+print("Average:",     get_average_price(products))
+apply_discount(products, 10)
+remove_product(products, "Banana")
+print_products(products)</div>
+      <div class="example">
+        <div class="example-title">Формат ответа</div>
+        <div class="example-content">10</div>
+      </div>
+    </div>
+    <div class="answer-form">
+      <label class="form-label">Ваш ответ (целое число):</label>
+      <input type="number" class="form-input" id="t1-input" min="0" max="99" placeholder="Введите число" />
+      <div class="button-group">
+        <button class="btn btn-submit" onclick="checkNumeric('t1',10)">Проверить</button>
+        <button class="btn btn-reset" onclick="resetTask('t1')">Очистить</button>
+      </div>
+      <div class="feedback" id="t1-feedback"></div>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════════════════════
+       ЗАДАЧА 2 — Реверс-промптинг (большое текстовое поле)
+  ═══════════════════════════════════════════════════════════ -->
+  <div class="task-card">
+    <div class="task-header">
+      <span class="task-number">Задача 2</span>
+      <span class="task-badge medium">Средняя</span>
+    </div>
+    <h2 class="task-title">Реверс-промптинг</h2>
+    <div class="task-desc">
+      <p>Вам предоставлен исходный код готового веб-приложения. Необходимо определить, какой промпт мог быть использован для его генерации с помощью ИИ.</p>
+      <p>Требуется: изучить код, определить функциональность и составить один промпт, который с высокой вероятностью позволит получить максимально похожий результат.</p>
+      <div class="code-block">&lt;!-- Habit Tracker — полный HTML-код приложения --&gt;
+&lt;!DOCTYPE html&gt;
+&lt;html lang="ru"&gt;
+  &lt;head&gt;
+    &lt;title&gt;Habit Tracker&lt;/title&gt;
+    &lt;style&gt;
+      body { font-family: Arial; background: #eef2f7; display: flex; justify-content: center; padding: 40px; }
+      .app { width: 500px; background: white; border-radius: 16px; padding: 24px; box-shadow: 0 5px 20px rgba(0,0,0,.1); }
+      .row { display: flex; gap: 10px; }
+      input { flex: 1; padding: 10px; }
+      button { padding: 10px 15px; cursor: pointer; }
+      .task { display: flex; justify-content: space-between; align-items: center;
+              margin-top: 10px; padding: 10px; border-radius: 8px; background: #f5f5f5; }
+      .done { text-decoration: line-through; opacity: .5; }
+      .progress-bar { height: 20px; background: #ddd; border-radius: 10px; overflow: hidden; }
+      .progress-fill { height: 100%; width: 0%; background: #4caf50; }
+    &lt;/style&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;div class="app"&gt;
+      &lt;h1&gt;Habit Tracker&lt;/h1&gt;
+      &lt;div class="row"&gt;
+        &lt;input id="habitInput" placeholder="Введите привычку" /&gt;
+        &lt;button onclick="addHabit()"&gt;Добавить&lt;/button&gt;
+      &lt;/div&gt;
+      &lt;div id="list"&gt;&lt;/div&gt;
+      &lt;div class="progress"&gt;
+        &lt;p&gt;Выполнено: &lt;span id="percent"&gt;0%&lt;/span&gt;&lt;/p&gt;
+        &lt;div class="progress-bar"&gt;&lt;div id="fill" class="progress-fill"&gt;&lt;/div&gt;&lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;script&gt;
+      let habits = [];
+      function addHabit() { /* добавляет привычку */ }
+      function toggleHabit(i) { habits[i].done = !habits[i].done; render(); }
+      function render() { /* перерисовывает список и прогресс-бар */ }
+    &lt;/script&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</div>
+      <p><strong>Критерии оценки:</strong> точность восстановления требований (60 б.), вероятность воспроизведения (30 б.), качество промпта (10 б.).</p>
+      <p style="color:#e74c3c;font-size:13px;">⚠ Задание проверяется жюри вручную. Если считаете, что решили — укажите 100 в поле ниже.</p>
+    </div>
+    <div class="answer-form">
+      <label class="form-label">Ваш промпт (до 3000 символов):</label>
+      <textarea class="form-textarea" id="t2-text" maxlength="3000" rows="7"
+        placeholder="Напишите промпт для генерации Habit Tracker..."></textarea>
+      <div class="char-count"><span id="t2-chars">0</span> / 3000</div>
+      <label class="form-label" style="margin-top:14px;">Или укажите 100, если считаете задание выполненным:</label>
+      <input type="number" class="form-input" id="t2-input" min="0" max="100" placeholder="100" style="max-width:120px;" />
+      <div class="button-group">
+        <button class="btn btn-submit" onclick="submitFree('t2')">Отправить</button>
+        <button class="btn btn-reset" onclick="resetTask('t2')">Очистить</button>
+      </div>
+      <div class="feedback" id="t2-feedback"></div>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════════════════════
+       ЗАДАЧА 3 — AI Startup (текст + ссылка)
+  ═══════════════════════════════════════════════════════════ -->
+  <div class="task-card">
+    <div class="task-header">
+      <span class="task-number">Задача 3</span>
+      <span class="task-badge hard">Сложная</span>
+    </div>
+    <h2 class="task-title">AI Startup за 30 минут</h2>
+    <div class="task-desc">
+      <p>Создайте минимально жизнеспособный продукт (MVP), решающий реальную проблему пользователей, используя технологии ИИ. За 30 минут: придумайте идею, разработайте прототип, продемонстрируйте возможности.</p>
+      <div class="example">
+        <div class="example-title">Требования к продукту</div>
+        <div class="example-content">• Использует AI  • Решает практическую задачу
+• Имеет UI       • Принимает данные от пользователя
+• Выдаёт полезный результат</div>
+      </div>
+      <div class="example">
+        <div class="example-title">Формат сдачи</div>
+        <div class="example-content">1. Ссылка на прототип / исходный код
+2. Название стартапа
+3. Краткое описание проблемы
+4. Демонстрация (до 3 мин)</div>
+      </div>
+      <p style="color:#e74c3c;font-size:13px;">⚠ Задание проверяется жюри вручную. Если считаете, что решили — укажите 100 в поле ниже.</p>
+    </div>
+    <div class="answer-form">
+      <label class="form-label">Ссылка на проект / код:</label>
+      <input type="text" class="form-input" id="t3-link" placeholder="https://..." />
+      <label class="form-label" style="margin-top:14px;">Описание (название, проблема, демо):</label>
+      <textarea class="form-textarea" id="t3-text" rows="5" maxlength="2000"
+        placeholder="Название стартапа, описание проблемы..."></textarea>
+      <label class="form-label" style="margin-top:14px;">Или укажите 100, если считаете задание выполненным:</label>
+      <input type="number" class="form-input" id="t3-input" min="0" max="100" placeholder="100" style="max-width:120px;" />
+      <div class="button-group">
+        <button class="btn btn-submit" onclick="submitFree('t3')">Отправить</button>
+        <button class="btn btn-reset" onclick="resetTask('t3')">Очистить</button>
+      </div>
+      <div class="feedback" id="t3-feedback"></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       ЗАДАЧА 4 — Одним промптом (большое текстовое поле)
+  ═══════════════════════════════════════════════════════════ -->
+  <div class="task-card">
+    <div class="task-header">
+      <span class="task-number">Задача 4</span>
+      <span class="task-badge medium">Средняя</span>
+    </div>
+    <h2 class="task-title">Одним промптом</h2>
+    <div class="task-desc">
+      <p>Создайте браузерную игру UNO, используя <strong>только один запрос</strong> к ИИ. Цель — продемонстрировать умение составлять подробные и точные промпты.</p>
+      <div class="example">
+        <div class="example-title">Игра должна включать</div>
+        <div class="example-content">• Графический интерфейс  • Ход игрока
+• Компьютерного соперника • Основные правила UNO
+• Определение победителя</div>
+      </div>
+      <div class="example">
+        <div class="example-title">Ограничения</div>
+        <div class="example-content">• Только один промпт  • Нельзя редактировать код вручную
+• Нельзя отправлять доп. запросы ИИ</div>
+      </div>
+      <p style="color:#e74c3c;font-size:13px;">⚠ Задание проверяется жюри вручную. Если считаете, что решили — укажите 100 в поле ниже.</p>
+    </div>
+    <div class="answer-form">
+      <label class="form-label">Ваш промпт (до 5000 символов):</label>
+      <textarea class="form-textarea" id="t4-text" maxlength="5000" rows="8"
+        placeholder="Напишите детальный промпт для создания игры UNO..."></textarea>
+      <div class="char-count"><span id="t4-chars">0</span> / 5000</div>
+      <label class="form-label" style="margin-top:14px;">Или укажите 100, если считаете задание выполненным:</label>
+      <input type="number" class="form-input" id="t4-input" min="0" max="100" placeholder="100" style="max-width:120px;" />
+      <div class="button-group">
+        <button class="btn btn-submit" onclick="submitFree('t4')">Отправить</button>
+        <button class="btn btn-reset" onclick="resetTask('t4')">Очистить</button>
+      </div>
+      <div class="feedback" id="t4-feedback"></div>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════════════════════
+       ЗАДАЧА 5 — Умный склад (код + тесты)
+  ═══════════════════════════════════════════════════════════ -->
+  <div class="task-card">
+    <div class="task-header">
+      <span class="task-number">Задача 5</span>
+      <span class="task-badge code">Алгоритмическая</span>
+    </div>
+    <h2 class="task-title">Умный склад</h2>
+    <div class="task-desc">
+      <p>На складе находится <strong>N</strong> коробок. Для каждой коробки известен её вес. Необходимо определить максимальное количество коробок, которое можно погрузить в грузовик грузоподъёмностью <strong>K</strong>.</p>
+      <div class="example">
+        <div class="example-title">Формат ввода</div>
+        <div class="example-content">Первая строка: N K
+Вторая строка: N целых чисел — веса коробок</div>
+      </div>
+      <div class="example">
+        <div class="example-title">Пример</div>
+        <div class="example-content">Ввод:
+5 10
+2 3 5 6 4
+
+Вывод:
+3</div>
+      </div>
+      <div class="example">
+        <div class="example-title">Ограничения</div>
+        <div class="example-content">1 ≤ N ≤ 100 000    1 ≤ K ≤ 10⁹</div>
+      </div>
+    </div>
+    <div class="answer-form">
+      <div class="lang-tabs">
+        <button class="lang-tab active" onclick="setLang('t5','python')">Python</button>
+        <button class="lang-tab" onclick="setLang('t5','js')">JavaScript</button>
+      </div>
+      <label class="form-label">Ваше решение:</label>
+      <textarea class="code-editor" id="t5-code" rows="10"
+        spellcheck="false">n, k = map(int, input().split())
+weights = list(map(int, input().split()))
+weights.sort()
+count = 0
+total = 0
+for w in weights:
+    if total + w <= k:
+        total += w
+        count += 1
+    else:
+        break
+print(count)</textarea>
+      <input type="hidden" id="t5-lang" value="python" />
+      <div class="button-group">
+        <button class="btn btn-run" onclick="runTests('t5')">▶ Запустить тесты</button>
+        <button class="btn btn-reset" onclick="resetTask('t5')">Очистить</button>
+      </div>
+      <div class="test-results" id="t5-tests"></div>
+      <div class="feedback" id="t5-feedback"></div>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════════════════════
+       ЗАДАЧА 6 — Самый популярный символ (код + тесты)
+  ═══════════════════════════════════════════════════════════ -->
+  <div class="task-card">
+    <div class="task-header">
+      <span class="task-number">Задача 6</span>
+      <span class="task-badge code">Алгоритмическая</span>
+    </div>
+    <h2 class="task-title">Самый популярный символ</h2>
+    <div class="task-desc">
+      <p>Дана строка длиной до 1 000 000 символов. Необходимо определить символ, который встречается чаще всего. Если таких символов несколько — вывести лексикографически минимальный.</p>
+      <div class="example">
+        <div class="example-title">Пример</div>
+        <div class="example-content">Ввод:
+abracadabra
+
+Вывод:
+a</div>
+      </div>
+      <div class="example">
+        <div class="example-title">Ограничения</div>
+        <div class="example-content">Строка содержит только латинские буквы нижнего регистра.</div>
+      </div>
+    </div>
+    <div class="answer-form">
+      <div class="lang-tabs">
+        <button class="lang-tab active" onclick="setLang('t6','python')">Python</button>
+        <button class="lang-tab" onclick="setLang('t6','js')">JavaScript</button>
+      </div>
+      <label class="form-label">Ваше решение:</label>
+      <textarea class="code-editor" id="t6-code" rows="8"
+        spellcheck="false">s = input()
+from collections import Counter
+cnt = Counter(s)
+max_count = max(cnt.values())
+result = min(c for c, v in cnt.items() if v == max_count)
+print(result)</textarea>
+      <input type="hidden" id="t6-lang" value="python" />
+      <div class="button-group">
+        <button class="btn btn-run" onclick="runTests('t6')">▶ Запустить тесты</button>
+        <button class="btn btn-reset" onclick="resetTask('t6')">Очистить</button>
+      </div>
+      <div class="test-results" id="t6-tests"></div>
+      <div class="feedback" id="t6-feedback"></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       ЗАДАЧА 7 — Робот-доставщик (код + тесты)
+  ═══════════════════════════════════════════════════════════ -->
+  <div class="task-card">
+    <div class="task-header">
+      <span class="task-number">Задача 7</span>
+      <span class="task-badge code">Алгоритмическая</span>
+    </div>
+    <h2 class="task-title">Робот-доставщик</h2>
+    <div class="task-desc">
+      <p>Робот находится в точке (0, 0). Ему передаётся последовательность команд: <strong>U</strong> — вверх, <strong>D</strong> — вниз, <strong>L</strong> — влево, <strong>R</strong> — вправо.</p>
+      <p>Необходимо определить минимальное количество шагов, которое потребуется роботу, чтобы вернуться в начало координат после выполнения всех команд.</p>
+      <div class="example">
+        <div class="example-title">Пример</div>
+        <div class="example-content">Ввод:
+UURRRD
+
+После команд робот в точке (3, 1).
+|3| + |1| = 4
+
+Вывод:
+4</div>
+      </div>
+      <div class="example">
+        <div class="example-title">Ограничения</div>
+        <div class="example-content">Строка команд длиной до 10⁶ символов.</div>
+      </div>
+    </div>
+    <div class="answer-form">
+      <div class="lang-tabs">
+        <button class="lang-tab active" onclick="setLang('t7','python')">Python</button>
+        <button class="lang-tab" onclick="setLang('t7','js')">JavaScript</button>
+      </div>
+      <label class="form-label">Ваше решение:</label>
+      <textarea class="code-editor" id="t7-code" rows="8"
+        spellcheck="false">cmds = input()
+x = y = 0
+for c in cmds:
+    if c == 'U': y += 1
+    elif c == 'D': y -= 1
+    elif c == 'R': x += 1
+    elif c == 'L': x -= 1
+print(abs(x) + abs(y))</textarea>
+      <input type="hidden" id="t7-lang" value="python" />
+      <div class="button-group">
+        <button class="btn btn-run" onclick="runTests('t7')">▶ Запустить тесты</button>
+        <button class="btn btn-reset" onclick="resetTask('t7')">Очистить</button>
+      </div>
+      <div class="test-results" id="t7-tests"></div>
+      <div class="feedback" id="t7-feedback"></div>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════════════════════
+       ЗАДАЧА 8 — Таинственная последовательность (числовой ответ)
+  ═══════════════════════════════════════════════════════════ -->
+  <div class="task-card">
+    <div class="task-header">
+      <span class="task-number">Задача 8</span>
+      <span class="task-badge">Лёгкая</span>
+    </div>
+    <h2 class="task-title">Таинственная последовательность</h2>
+    <div class="task-desc">
+      <p>Рассмотрим следующую функцию (псевдокод на КуМире):</p>
+      <div class="code-block">алг f(n)
+нач
+    если n = 1 то
+        вернуть 1
+    все
+
+    если n чётное то
+        вернуть f(n div 2)
+    иначе
+        вернуть f(n - 1) + 1
+    все
+кон</div>
+      <p>Необходимо определить значение <strong>f(2025)</strong>.</p>
+      <div class="example">
+        <div class="example-title">Формат ответа</div>
+        <div class="example-content">Одно целое число.</div>
+      </div>
+    </div>
+    <div class="answer-form">
+      <label class="form-label">Ваш ответ:</label>
+      <input type="number" class="form-input" id="t8-input" min="0" placeholder="Введите число" />
+      <div class="button-group">
+        <button class="btn btn-submit" onclick="checkNumeric('t8',8)">Проверить</button>
+        <button class="btn btn-reset" onclick="resetTask('t8')">Очистить</button>
+      </div>
+      <div class="feedback" id="t8-feedback"></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       ЗАДАЧА 9 — Вы сожгли токены для этого? (текстовый ответ)
+  ═══════════════════════════════════════════════════════════ -->
+  <div class="task-card">
+    <div class="task-header">
+      <span class="task-number">Задача 9</span>
+      <span class="task-badge">Лёгкая</span>
+    </div>
+    <h2 class="task-title">Вы сожгли токены для этого?</h2>
+    <div class="task-desc">
+      <p>Как вывести на экран <strong>'hello world'</strong> на русском языке?</p>
+      <div class="example">
+        <div class="example-title">Формат ответа</div>
+        <div class="example-content">Напишите ответ строкой (именно то, что должно быть выведено).</div>
+      </div>
+    </div>
+    <div class="answer-form">
+      <label class="form-label">Ваш ответ:</label>
+      <input type="text" class="form-input" id="t9-input" placeholder="Введите ответ" />
+      <div class="button-group">
+        <button class="btn btn-submit" onclick="checkText('t9','привет мир')">Проверить</button>
+        <button class="btn btn-reset" onclick="resetTask('t9')">Очистить</button>
+      </div>
+      <div class="feedback" id="t9-feedback"></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       ЗАДАЧА 10 — Утечка nonce в ECDSA (числовой ответ)
+  ═══════════════════════════════════════════════════════════ -->
+  <div class="task-card">
+    <div class="task-header">
+      <span class="task-number">Задача 10</span>
+      <span class="task-badge hard">Сложная</span>
+    </div>
+    <h2 class="task-title">Утечка nonce в ECDSA</h2>
+    <div class="task-desc">
+      <p>В криптографической системе ECDSA, работающей на эллиптической кривой secp256k1, была допущена критическая ошибка: для двух различных сообщений использовался один и тот же одноразовый параметр (nonce) <strong>k</strong>.</p>
+      <p>Это позволяет восстановить секретный ключ подписи. Вам даны параметры двух подписей и порядок группы. Требуется восстановить приватный ключ <strong>d</strong>.</p>
+      <div class="code-block">n  = 115792089237316195423570985008687907852837564279074904382605163141518161494337
+r  = 64815329020249867864849938248946398274839967837590476665552683842330605994785
+z1 = 21537068444347613717626221621...  (хеш первого сообщения)
+z2 = 98765432109876543210987654321...  (хеш второго сообщения)
+s1 = 55555555555555555555555555555...  (подпись 1)
+s2 = 44444444444444444444444444444...  (подпись 2)</div>
+      <p>Формула восстановления: <code>k = (z1 - z2) * modinv(s1 - s2, n) mod n</code>, затем <code>d = (s1*k - z1) * modinv(r, n) mod n</code>.</p>
+      <div class="example">
+        <div class="example-title">Формат ответа</div>
+        <div class="example-content">Одно большое целое число — значение приватного ключа d.</div>
+      </div>
+    </div>
+    <div class="answer-form">
+      <label class="form-label">Ваш ответ (приватный ключ d):</label>
+      <input type="text" class="form-input" id="t10-input" placeholder="Введите большое целое число" />
+      <div class="button-group">
+        <button class="btn btn-submit" onclick="checkText('t10','3483573479175930363270746512043214763813635980625427317803524525405247840527')">Проверить</button>
+        <button class="btn btn-reset" onclick="resetTask('t10')">Очистить</button>
+      </div>
+      <div class="feedback" id="t10-feedback"></div>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<footer>
+  <div class="footer-container">
+    <div>
+      <p>© 2026–2027 Профиль Вайбкодинг ВсОШ по информатике.</p>
+      <p style="font-size:12px;margin-top:4px;color:#95a5a6">Пригласительный тур</p>
+    </div>
+    <div class="footer-links">
+      <a href="index.html">Главная</a>
+      <a href="https://t.me/vsoshvibe" target="_blank">Поддержка</a>
+    </div>
+  </div>
+</footer>
+
+
+<script src="https://cdn.jsdelivr.net/pyodide/v0.23.4/full/pyodide.js"></script>
+<script>
+// ═══════════════════════════════════════════════════════════
+// Хранилище ответов и состояния
+// ═══════════════════════════════════════════════════════════
+const storage = {
+  get: (key) => localStorage.getItem(`vsosh_${key}`),
+  set: (key, val) => localStorage.setItem(`vsosh_${key}`, val),
+  solved: () => {
+    let count = 0;
+    for (let i = 1; i <= 10; i++) {
+      if (storage.get(`t${i}_solved`) === 'true') count++;
+    }
+    return count;
+  }
+};
+
+// ═══════════════════════════════════════════════════════════
+// Загрузка сохранённых ответов при старте
+// ═══════════════════════════════════════════════════════════
+window.addEventListener('load', () => {
+  // Восстановление полей ввода
+  for (let i = 1; i <= 10; i++) {
+    const inp = document.getElementById(`t${i}-input`);
+    const txt = document.getElementById(`t${i}-text`);
+    const code = document.getElementById(`t${i}-code`);
+    const link = document.getElementById(`t${i}-link`);
+    
+    if (inp && storage.get(`t${i}_ans`)) inp.value = storage.get(`t${i}_ans`);
+    if (txt && storage.get(`t${i}_text`)) txt.value = storage.get(`t${i}_text`);
+    if (code && storage.get(`t${i}_code`)) code.value = storage.get(`t${i}_code`);
+    if (link && storage.get(`t${i}_link`)) link.value = storage.get(`t${i}_link`);
+  }
+  
+  // Счётчики символов
+  ['t2-text','t4-text'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      const charId = id.replace('-text','-chars');
+      el.addEventListener('input', () => {
+        document.getElementById(charId).textContent = el.value.length;
+      });
+      document.getElementById(charId).textContent = el.value.length;
+    }
+  });
+  
+  updateProgress();
+});
+
+// ═══════════════════════════════════════════════════════════
+// Обновление прогресса
+// ═══════════════════════════════════════════════════════════
+function updateProgress() {
+  const solved = storage.solved();
+  const pct = Math.round((solved / 10) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressText').textContent = `${solved} / 10 решено`;
+}
+
+// ═══════════════════════════════════════════════════════════
+// Проверка числового ответа
+// ═══════════════════════════════════════════════════════════
+function checkNumeric(taskId, expected) {
+  const inp = document.getElementById(`${taskId}-input`);
+  const fb = document.getElementById(`${taskId}-feedback`);
+  const val = parseInt(inp.value);
+  
+  storage.set(`${taskId}_ans`, inp.value);
+  
+  if (val === expected) {
+    fb.className = 'feedback success';
+    fb.textContent = '✓ Правильно! Задача решена.';
+    storage.set(`${taskId}_solved`, 'true');
+  } else {
+    fb.className = 'feedback error';
+    fb.textContent = `✗ Неверно. Проверьте решение.`;
+    storage.set(`${taskId}_solved`, 'false');
+  }
+  updateProgress();
+}
+
+// ═══════════════════════════════════════════════════════════
+// Проверка текстового ответа
+// ═══════════════════════════════════════════════════════════
+function checkText(taskId, expected) {
+  const inp = document.getElementById(`${taskId}-input`);
+  const fb = document.getElementById(`${taskId}-feedback`);
+  const val = inp.value.trim().toLowerCase();
+  const exp = expected.toLowerCase();
+  
+  storage.set(`${taskId}_ans`, inp.value);
+  
+  if (val === exp) {
+    fb.className = 'feedback success';
+    fb.textContent = '✓ Правильно! Задача решена.';
+    storage.set(`${taskId}_solved`, 'true');
+  } else {
+    fb.className = 'feedback error';
+    fb.textContent = `✗ Неверно. Проверьте ответ.`;
+    storage.set(`${taskId}_solved`, 'false');
+  }
+  updateProgress();
+}
+
+
+// ═══════════════════════════════════════════════════════════
+// Отправка свободных ответов (задачи 2,3,4)
+// ═══════════════════════════════════════════════════════════
+function submitFree(taskId) {
+  const inp = document.getElementById(`${taskId}-input`);
+  const txt = document.getElementById(`${taskId}-text`);
+  const link = document.getElementById(`${taskId}-link`);
+  const fb = document.getElementById(`${taskId}-feedback`);
+  
+  // Сохранение
+  if (inp) storage.set(`${taskId}_ans`, inp.value);
+  if (txt) storage.set(`${taskId}_text`, txt.value);
+  if (link) storage.set(`${taskId}_link`, link.value);
+  
+  // Проверка: если указано 100 — считаем решённым
+  if (inp && parseInt(inp.value) === 100) {
+    fb.className = 'feedback success';
+    fb.textContent = '✓ Ответ отправлен. Задача отмечена как решённая.';
+    storage.set(`${taskId}_solved`, 'true');
+  } else {
+    fb.className = 'feedback info';
+    fb.textContent = '✓ Ответ сохранён. Проверка будет выполнена жюри.';
+    storage.set(`${taskId}_solved`, 'false');
+  }
+  updateProgress();
+}
+
+// ═══════════════════════════════════════════════════════════
+// Сброс задачи
+// ═══════════════════════════════════════════════════════════
+function resetTask(taskId) {
+  const inp = document.getElementById(`${taskId}-input`);
+  const txt = document.getElementById(`${taskId}-text`);
+  const code = document.getElementById(`${taskId}-code`);
+  const link = document.getElementById(`${taskId}-link`);
+  const fb = document.getElementById(`${taskId}-feedback`);
+  const tests = document.getElementById(`${taskId}-tests`);
+  
+  if (inp) inp.value = '';
+  if (txt) txt.value = '';
+  if (link) link.value = '';
+  if (fb) fb.className = 'feedback';
+  if (tests) tests.innerHTML = '';
+  
+  // Восстановление дефолтного кода для алгоритмических задач
+  if (code && taskId === 't5') {
+    code.value = `n, k = map(int, input().split())
+weights = list(map(int, input().split()))
+weights.sort()
+count = 0
+total = 0
+for w in weights:
+    if total + w <= k:
+        total += w
+        count += 1
+    else:
+        break
+print(count)`;
+  }
+  if (code && taskId === 't6') {
+    code.value = `s = input()
+from collections import Counter
+cnt = Counter(s)
+max_count = max(cnt.values())
+result = min(c for c, v in cnt.items() if v == max_count)
+print(result)`;
+  }
+  if (code && taskId === 't7') {
+    code.value = `cmds = input()
+x = y = 0
+for c in cmds:
+    if c == 'U': y += 1
+    elif c == 'D': y -= 1
+    elif c == 'R': x += 1
+    elif c == 'L': x -= 1
+print(abs(x) + abs(y))`;
+  }
+  
+  storage.set(`${taskId}_ans`, '');
+  storage.set(`${taskId}_text`, '');
+  storage.set(`${taskId}_code`, '');
+  storage.set(`${taskId}_link`, '');
+  storage.set(`${taskId}_solved`, 'false');
+  updateProgress();
+}
+
+// ═══════════════════════════════════════════════════════════
+// Переключение языка программирования
+// ═══════════════════════════════════════════════════════════
+function setLang(taskId, lang) {
+  document.getElementById(`${taskId}-lang`).value = lang;
+  const tabs = document.querySelectorAll(`#${taskId}-code`).item(0).closest('.answer-form').querySelectorAll('.lang-tab');
+  tabs.forEach(t => t.classList.remove('active'));
+  event.target.classList.add('active');
+}
+
