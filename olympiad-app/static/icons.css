@@ -1,0 +1,46 @@
+/* SVG Icons CSS */
+
+.icon {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.125em;
+  fill: currentColor;
+  margin-right: 0.4em;
+}
+
+.icon-sm {
+  width: 1.2em;
+  height: 1.2em;
+}
+
+.icon-lg {
+  width: 3rem;
+  height: 3rem;
+}
+
+.icon-xl {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+/* Icon colors */
+.icon-primary {
+  color: #00a8cc;
+}
+
+.icon-success {
+  color: #27ae60;
+}
+
+.icon-warning {
+  color: #f39c12;
+}
+
+.icon-danger {
+  color: #e74c3c;
+}
+
+.icon-muted {
+  color: #7f8c8d;
+}
